@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<urlset xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 
+    http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd" 
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+    xmlns:xhtml="http://www.w3.org/1999/xhtml">
+    <url>
+        <loc>https://example.com/</loc>
+        <lastmod>2020-06-28</lastmod>
+    </url>
+    <url>
+        <loc>https://example.com/about</loc>
+        <lastmod>2020-06-28</lastmod>
+    </url>
+    <url>
+        <loc>https://example.com/p/hello-nextjs</loc>
+        <lastmod>2020-06-28</lastmod>
+    </url>
+    <url>
+        <loc>https://example.com/p/learn-nextjs</loc>
+        <lastmod>2020-06-28</lastmod>
+    </url>
+    <url>
+        <loc>https://example.com/p/deploy-nextjs</loc>
+        <lastmod>2020-06-28</lastmod>
+    </url>
+</urlset>

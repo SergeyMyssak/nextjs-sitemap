@@ -1,0 +1,17 @@
+{
+  "name": "dynamic-paths",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "generate-sitemap": "node sitemap-generator.js"
+  },
+  "dependencies": {
+    "@sergeymyssak/nextjs-sitemap": "0.0.2",
+    "next": "9.4.4",
+    "react": "16.13.1",
+    "react-dom": "16.13.1"
+  }
+}
