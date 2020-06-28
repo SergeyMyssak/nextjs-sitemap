@@ -1,0 +1,65 @@
+{
+  "name": "@sergeymyssak/nextjs-sitemap",
+  "version": "0.0.1",
+  "description": "Generate dynamic sitemap.xml for Next.js projects",
+  "main": "dist/Core.js",
+  "types": "dist/types.d.ts",
+  "scripts": {
+    "start": "tsc && eslint '*/**/*.{js,ts}' --quiet --fix",
+    "postinstall": "typesync"
+  },
+  "keywords": [
+    "next",
+    "next.js",
+    "nextjs",
+    "seo",
+    "sitemap",
+    "sitemap.xml",
+    "ssr",
+    "node"
+  ],
+  "author": {
+    "name": "Sergey Myssak",
+    "email": "sergeymyssak@gmail.com",
+    "url": "https://www.linkedin.com/in/sergeymyssak/"
+  },
+  "contributors": [
+    {
+      "name": "Andrey Myssak",
+      "email": "andreymyssak@gmail.com",
+      "url": "https://www.linkedin.com/in/andreymyssak/"
+    }
+  ],
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com/"
+  },
+  "repository": {
+    "url": "https://github.com/SergeyMyssak/nextjs-sitemap.git"
+  },
+  "license": "ISC",
+  "husky": {
+    "hooks": {
+      "pre-commit": "yarn lint",
+      "pre-push": "yarn lint"
+    }
+  },
+  "dependencies": {
+    "date-fns": "^2.14.0"
+  },
+  "devDependencies": {
+    "@types/date-fns": "^2.6.0",
+    "@types/eslint": "^6.8.1",
+    "@types/eslint-plugin-prettier": "^3.1.0",
+    "@types/node": "^14.0.14",
+    "@types/prettier": "^2.0.1",
+    "@typescript-eslint/eslint-plugin": "^3.0.0",
+    "@typescript-eslint/parser": "^3.0.0",
+    "eslint": "^7.1.0",
+    "eslint-config-prettier": "^6.11.0",
+    "eslint-plugin-prettier": "^3.1.3",
+    "husky": "^4.2.5",
+    "prettier": "^2.0.5",
+    "typescript": "^3.9.3",
+    "typesync": "^0.6.1"
+  }
+}
