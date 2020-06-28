@@ -1,6 +1,6 @@
 {
   "name": "@sergeymyssak/nextjs-sitemap",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Generate dynamic sitemap.xml for Next.js projects",
   "main": "dist/Core.js",
   "types": "dist/types.d.ts",
@@ -30,9 +30,6 @@
       "url": "https://www.linkedin.com/in/andreymyssak/"
     }
   ],
-  "publishConfig": {
-    "registry": "https://npm.pkg.github.com/"
-  },
   "repository": {
     "url": "https://github.com/SergeyMyssak/nextjs-sitemap.git",
     "type": "git"
