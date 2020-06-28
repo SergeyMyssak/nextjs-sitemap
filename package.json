@@ -34,8 +34,11 @@
     "registry": "https://npm.pkg.github.com/"
   },
   "repository": {
-    "url": "https://github.com/SergeyMyssak/nextjs-sitemap.git"
+    "url": "https://github.com/SergeyMyssak/nextjs-sitemap.git",
+    "type": "git"
   },
+  "homepage": "https://github.com/SergeyMyssak/nextjs-sitemap",
+  "bugs": "https://github.com/SergeyMyssak/nextjs-sitemap/issues",
   "license": "ISC",
   "husky": {
     "hooks": {
