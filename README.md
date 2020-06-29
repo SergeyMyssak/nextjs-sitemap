@@ -74,7 +74,7 @@ const sitemap = new Sitemap({
 sitemap.generateSitemap();
 ```
 
-For dynamic routes (eg. `/pages/project/[id].*`), you have to declare them with the [`include`](#routes-optional---array--function) property.  
+For dynamic routes (eg. `/pages/project/[id].*`), you have to declare them with the `include` property.  
 ```js
 async function getDynamicPaths() {
   const data = ['house', 'flower', 'table'];
@@ -93,7 +93,7 @@ getDynamicPaths().then((paths) => {
 });
 ```
 
-You can exclude any path with the [`exclude`](#exclude-optional---string-array) property.
+You can exclude any path with the `exclude` property.
 ```js
 const sitemap = new Sitemap({
   baseUrl: 'https://example.com',
