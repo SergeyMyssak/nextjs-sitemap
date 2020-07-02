@@ -3,7 +3,7 @@
   "version": "0.0.7",
   "description": "Generate dynamic sitemap.xml for Next.js projects",
   "main": "dist/Core.js",
-  "types": "dist/types.d.ts",
+  "types": "dist/Core.d.ts",
   "scripts": {
     "start": "tsc && eslint '*/**/*.{js,ts}' --quiet --fix"
   },

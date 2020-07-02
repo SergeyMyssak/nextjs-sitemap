@@ -38,6 +38,7 @@ var __importDefault =
     return mod && mod.__esModule ? mod : { default: mod };
   };
 Object.defineProperty(exports, '__esModule', { value: true });
+exports.configureSitemap = void 0;
 const fs_1 = __importDefault(require('fs'));
 const path_1 = __importDefault(require('path'));
 const utils_1 = require('./utils');
@@ -173,4 +174,8 @@ class Core {
     this.targetDirectory = targetDirectory;
   }
 }
-module.exports = Core;
+function configureSitemap(config) {
+  const Sitemap = Core;
+  return new Sitemap(config);
+}
+exports.configureSitemap = configureSitemap;

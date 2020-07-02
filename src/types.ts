@@ -1,3 +1,11 @@
+export interface ICoreConstructor {
+  new (config: IConfig): ICoreInterface;
+}
+
+export interface ICoreInterface {
+  generateSitemap: () => void;
+}
+
 interface IConfig {
   baseUrl: string;
   exclude?: string[];

@@ -1,6 +1,8 @@
 import fs from 'fs';
 import path from 'path';
 import IConfig, {
+  ICoreConstructor,
+  ICoreInterface,
   IPagesConfig,
   IPathMap,
   ISitemapSite,
@@ -15,7 +17,7 @@ import {
   getXmlUrl,
 } from './utils';
 
-class Core {
+class Core implements ICoreInterface {
   private xmlHeader = '<?xml version="1.0" encoding="UTF-8" ?>\n';
   private xmlURLSet = `<urlset xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 
     http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd" 
@@ -164,4 +166,7 @@ class Core {
     );
 }
 
-module.exports = Core;
+export function configureSitemap(config: IConfig): ICoreInterface {
+  const Sitemap: ICoreConstructor = Core;
+  return new Sitemap(config);
+}
