@@ -1,25 +1,25 @@
 {
   "name": "@sergeymyssak/nextjs-sitemap",
   "version": "0.0.7",
-  "description": "Generate dynamic sitemap.xml for Next.js projects",
+  "description": "Generate dynamic sitemap.xml for Next.js project!",
   "main": "dist/Core.js",
   "types": "dist/Core.d.ts",
   "scripts": {
     "start": "tsc && eslint '*/**/*.{js,ts}' --quiet --fix"
   },
   "keywords": [
-    "next",
     "next.js",
     "nextjs",
-    "seo",
     "sitemap",
     "sitemap.xml",
-    "ssr",
-    "node"
+    "sitemap-xml",
+    "sitemap-generator",
+    "sitemap-builder",
+    "sitemap-generation"
   ],
   "author": {
     "name": "Sergey Myssak",
-    "email": "sergeymyssak@gmail.com",
+    "email": "praeceptivus@gmail.com",
     "url": "https://www.linkedin.com/in/sergeymyssak/"
   },
   "contributors": [
