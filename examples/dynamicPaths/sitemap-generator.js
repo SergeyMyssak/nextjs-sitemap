@@ -1,4 +1,4 @@
-const Sitemap = require('@sergeymyssak/nextjs-sitemap');
+const { configureSitemap } = require('@sergeymyssak/nextjs-sitemap');
 
 async function getDynamicPaths() {
   const data = ['house', 'flower', 'table'];
@@ -6,12 +6,12 @@ async function getDynamicPaths() {
 }
 
 getDynamicPaths().then((paths) => {
-  const sitemap = new Sitemap({
+  const Sitemap = configureSitemap({
     baseUrl: 'https://example.com',
     include: paths,
     exclude: ['/project/[id]'],
     targetDirectory: __dirname + '/public',
     pagesDirectory: __dirname + '/src/pages',
   });
-  sitemap.generateSitemap();
+  Sitemap.generateSitemap();
 });

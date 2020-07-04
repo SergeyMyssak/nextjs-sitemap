@@ -1,6 +1,6 @@
-const Sitemap = require('@sergeymyssak/nextjs-sitemap');
+const { configureSitemap } = require('@sergeymyssak/nextjs-sitemap');
 
-const sitemap = new Sitemap({
+const Sitemap = configureSitemap({
   baseUrl: 'https://example.com',
   pagesConfig: {
     '/about': {
@@ -11,4 +11,4 @@ const sitemap = new Sitemap({
   targetDirectory: __dirname + '/public',
   pagesDirectory: __dirname + '/src/pages',
 });
-sitemap.generateSitemap();
+Sitemap.generateSitemap();
