@@ -1,0 +1,23 @@
+{
+  "name": "typescript",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "transpile": "babel sitemap-generator.ts --extensions \".ts\" --out-dir .build",
+    "generate-sitemap": "node .build/sitemap-generator.js"
+  },
+  "dependencies": {
+    "@babel/cli": "^7.10.4",
+    "@sergeymyssak/nextjs-sitemap": "1.0.0",
+    "next": "9.4.4",
+    "react": "16.13.1",
+    "react-dom": "16.13.1"
+  },
+  "devDependencies": {
+    "@types/react-dom": "^16.9.8",
+    "typescript": "^3.9.6"
+  }
+}
