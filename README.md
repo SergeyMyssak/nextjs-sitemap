@@ -2,7 +2,7 @@
 
 [![Version][version-badge]][package]
 [![Downloads][downloads-badge]][downloads]
-[![MIT License][license-badge]][license]
+[![ISC License][license-badge]][license]
 
 Generate dynamic sitemap.xml for Next.js projects!  
 Checkout the [examples](https://github.com/SergeyMyssak/nextjs-sitemap/tree/master/examples) folder for source code.
@@ -60,7 +60,10 @@ Checkout the [Google sitemap example](https://support.google.com/webmasters/answ
 
 All static routes (eg. `/pages/about.*`) are automatically add to the sitemap. 
 ```js
-const sitemap = new Sitemap({
+// See typescript version in examples
+const { configureSitemap } = require('@sergeymyssak/nextjs-sitemap');
+
+const Sitemap = configureSitemap({
   baseUrl: 'https://example.com',
   pagesConfig: {
     '/about': {
@@ -71,37 +74,41 @@ const sitemap = new Sitemap({
   targetDirectory: __dirname + '/public',
   pagesDirectory: __dirname + '/src/pages',
 });
-sitemap.generateSitemap();
+Sitemap.generateSitemap();
 ```
 
 For dynamic routes (eg. `/pages/project/[id].*`), you have to declare them with the `include` property.  
 ```js
+const { configureSitemap } = require('@sergeymyssak/nextjs-sitemap');
+
 async function getDynamicPaths() {
   const data = ['house', 'flower', 'table'];
   return data.map((item) => `/project/${item}`);
 }
 
 getDynamicPaths().then((paths) => {
-  const sitemap = new Sitemap({
+  const Sitemap = configureSitemap({
     baseUrl: 'https://example.com',
     include: paths,
     exclude: ['/project/[id]'],
     targetDirectory: __dirname + '/public',
     pagesDirectory: __dirname + '/src/pages',
   });
-  sitemap.generateSitemap();
+  Sitemap.generateSitemap();
 });
 ```
 
 You can exclude any path with the `exclude` property.
 ```js
-const sitemap = new Sitemap({
+const { configureSitemap } = require('@sergeymyssak/nextjs-sitemap');
+
+const Sitemap = configureSitemap({
   baseUrl: 'https://example.com',
   exclude: ['/about'],
   targetDirectory: __dirname + '/public',
   pagesDirectory: __dirname + '/src/pages',
 });
-sitemap.generateSitemap();
+Sitemap.generateSitemap();
 ```
 
 ### Sitemap options
@@ -117,12 +124,14 @@ Ignore files by extension.
 
 Example:
 ```js
-const sitemap = new Sitemap({
+const { configureSitemap } = require('@sergeymyssak/nextjs-sitemap');
+
+const Sitemap = configureSitemap({
   // ...
   excludeExtensions: ['.ts'],
   // ...
 });
-sitemap.generateSitemap();
+Sitemap.generateSitemap();
 ```
 
 ##### `excludeIndex` (`optional`): `boolean`
@@ -133,13 +142,15 @@ Array of extra paths to include in the sitemap. If you want to add any route wit
 
 Example:
 ```js
-const sitemap = new Sitemap({
+const { configureSitemap } = require('@sergeymyssak/nextjs-sitemap');
+
+const Sitemap = configureSitemap({
   // ...
   include: ['/project/1', '/project/2'],
   exclude: ['/project/[id]'],
   // ...
 });
-sitemap.generateSitemap();
+Sitemap.generateSitemap();
 ```
 
 ##### `isSubdomain` (`optional`): `boolean`
@@ -156,7 +167,9 @@ Object configuration of priority and changefreq per route.
 
 Example:
 ```js
-const sitemap = new Sitemap({
+const { configureSitemap } = require('@sergeymyssak/nextjs-sitemap');
+
+const Sitemap = configureSitemap({
   // ...
   pagesConfig: {
     '/about': {
@@ -170,7 +183,7 @@ const sitemap = new Sitemap({
   },
   // ...
 });
-sitemap.generateSitemap();
+Sitemap.generateSitemap();
 ```
 
 ##### `pagesDirectory` (`required`): `string`
@@ -181,7 +194,9 @@ Array of style objects that will be applied to sitemap.
 
 Example:
 ```js
-const sitemap = new Sitemap({
+const { configureSitemap } = require('@sergeymyssak/nextjs-sitemap');
+
+const Sitemap = configureSitemap({
   // ...
   sitemapStylesheet: [
     {
@@ -195,7 +210,7 @@ const sitemap = new Sitemap({
   ],
   // ...
 });
-sitemap.generateSitemap();
+Sitemap.generateSitemap();
 ```
 
 ## Useful information
