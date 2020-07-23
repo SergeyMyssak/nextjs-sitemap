@@ -31,6 +31,7 @@ class Core implements ICoreInterface {
   private excludeIndex: boolean;
   private include: string[];
   private isSubdomain: boolean;
+  private isTrailingSlashRequired: boolean;
   private langs?: string[];
   private nextConfigPath?: string;
   private pagesConfig: IPagesConfig;
@@ -48,6 +49,7 @@ class Core implements ICoreInterface {
       excludeIndex = true,
       include = [],
       isSubdomain = false,
+      isTrailingSlashRequired = false,
       langs,
       nextConfigPath,
       pagesConfig = {},
@@ -62,6 +64,7 @@ class Core implements ICoreInterface {
     this.exclude = exclude;
     this.excludeIndex = excludeIndex;
     this.isSubdomain = isSubdomain;
+    this.isTrailingSlashRequired = isTrailingSlashRequired;
     this.langs = langs;
     this.nextConfigPath = nextConfigPath;
     this.pagesConfig = pagesConfig;
@@ -83,6 +86,7 @@ class Core implements ICoreInterface {
       include: this.include,
       pagesConfig: this.pagesConfig,
       nextConfigPath: this.nextConfigPath,
+      isTrailingSlashRequired: this.isTrailingSlashRequired,
     });
 
     const filteredSitemap: ISitemapSite[] = sitemap.filter(

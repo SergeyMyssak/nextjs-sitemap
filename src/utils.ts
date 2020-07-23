@@ -48,6 +48,22 @@ const splitFilenameAndExtn = (filename: string): string[] => {
   ];
 };
 
+const appendTrailingSlash = (pagePath: string): string => {
+  const lastChar = pagePath.charAt(pagePath.length - 1);
+  if (lastChar === '/') {
+    return pagePath;
+  }
+  return pagePath + '/';
+};
+
+const removeTrailingSlash = (pagePath: string): string => {
+  const lastChar = pagePath.charAt(pagePath.length - 1);
+  if (lastChar === '/') {
+    return pagePath.substring(0, pagePath.length - 1);
+  }
+  return pagePath;
+};
+
 const isExcludedExtn = (
   fileExtension: string,
   excludeExtensions: string[],
@@ -112,6 +128,7 @@ const getSitemap = async ({
   include,
   pagesConfig,
   nextConfigPath,
+  isTrailingSlashRequired,
 }: IGetSitemap): Promise<ISitemapSite[]> => {
   if (nextConfigPath) {
     let nextConfig = require(nextConfigPath);
@@ -137,7 +154,11 @@ const getSitemap = async ({
       const priority = pageConfig?.priority ?? '';
       const changefreq = pageConfig?.changefreq ?? '';
 
-      return { pagePath, priority, changefreq };
+      const formattedPagePath = isTrailingSlashRequired
+        ? appendTrailingSlash(pagePath)
+        : removeTrailingSlash(pagePath);
+
+      return { pagePath: formattedPagePath, priority, changefreq };
     },
   );
 };

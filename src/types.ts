@@ -13,6 +13,7 @@ interface IConfig {
   excludeIndex?: boolean;
   include?: string[];
   isSubdomain?: boolean;
+  isTrailingSlashRequired?: boolean;
   langs?: string[];
   nextConfigPath?: string;
   pagesConfig?: IPagesConfig;
@@ -63,6 +64,7 @@ export interface IGetSitemap {
   include: string[];
   pagesConfig: IPagesConfig;
   nextConfigPath?: string;
+  isTrailingSlashRequired: boolean;
 }
 
 export interface IWriteSitemap {
