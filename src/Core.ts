@@ -13,7 +13,7 @@ import IConfig, {
 import {
   getPathMap,
   getSitemap,
-  getUrlWithLocaleSubdomain,
+  getLocalizedSubdomainUrl,
   getXmlUrl,
 } from './utils';
 
@@ -124,14 +124,14 @@ class Core implements ICoreInterface {
 
     this.langs.forEach((lang: string): void => {
       const localizedBaseUrl = this.isSubdomain
-        ? getUrlWithLocaleSubdomain(this.baseUrl, lang)
+        ? getLocalizedSubdomainUrl(this.baseUrl, lang)
         : `${this.baseUrl}/${lang}`;
 
       sitemap.forEach((url: ISitemapSite): void => {
         const alternateUrls = this.langs?.reduce(
           (accum: string, alternateLang: string): string => {
             const localizedAlternateUrl = this.isSubdomain
-              ? getUrlWithLocaleSubdomain(this.baseUrl, alternateLang)
+              ? getLocalizedSubdomainUrl(this.baseUrl, alternateLang)
               : `${this.baseUrl}/${alternateLang}`;
 
             return (

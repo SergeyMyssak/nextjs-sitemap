@@ -9,7 +9,7 @@ import {
   ISitemapSite,
 } from './types';
 
-const getUrlWithLocaleSubdomain = (baseUrl: string, lang: string): string => {
+const getLocalizedSubdomainUrl = (baseUrl: string, lang: string): string => {
   const protocolAndHostname = baseUrl.split('//');
   protocolAndHostname[1] = `${lang}.${protocolAndHostname[1]}`;
 
@@ -40,6 +40,14 @@ const getXmlUrl = ({
     </url>`;
 };
 
+const splitFilenameAndExtn = (filename: string): string[] => {
+  const dotIndex = filename.lastIndexOf('.');
+  return [
+    filename.substring(0, dotIndex),
+    filename.substring(dotIndex + 1, filename.length),
+  ];
+};
+
 const isExcludedExtn = (
   fileExtension: string,
   excludeExtensions: string[],
@@ -57,13 +65,13 @@ const getPathMap = ({
   excludeExtns,
   excludeIdx,
 }: IGetPathMap): IPathMap => {
-  const pagesNames: string[] = fs.readdirSync(folderPath);
+  const fileNames: string[] = fs.readdirSync(folderPath);
   let pathMap: IPathMap = {};
 
-  for (const pageName of pagesNames) {
-    if (isReservedPage(pageName)) continue;
+  for (const fileName of fileNames) {
+    if (isReservedPage(fileName)) continue;
 
-    const nextPath = folderPath + path.sep + pageName;
+    const nextPath = folderPath + path.sep + fileName;
     const isFolder = fs.lstatSync(nextPath).isDirectory();
 
     if (isFolder) {
@@ -80,18 +88,15 @@ const getPathMap = ({
       continue;
     }
 
-    const fileExtn = pageName.split('.').pop() ?? '';
-    const fileExtnLen = fileExtn.length + 1;
+    const [fileNameWithoutExtn, fileExtn] = splitFilenameAndExtn(fileName);
     if (isExcludedExtn(fileExtn, excludeExtns)) continue;
 
-    let fileNameWithoutExtn = pageName.slice(0, pageName.length - fileExtnLen);
-    if (excludeIdx && fileNameWithoutExtn === 'index') {
-      fileNameWithoutExtn = '';
-    }
+    const newFolderPath = folderPath
+      .replace(rootPath, '')
+      .replace(path.sep, '/');
 
-    const newFolderPath = folderPath.replace(rootPath, '').replace(/\\/g, '/');
-    const pagePath = `${newFolderPath}${
-      fileNameWithoutExtn ? '/' + fileNameWithoutExtn : ''
+    const pagePath = `${newFolderPath}/${
+      excludeIdx && fileNameWithoutExtn === 'index' ? '' : fileNameWithoutExtn
     }`;
 
     pathMap[pagePath] = {
@@ -117,7 +122,6 @@ const getSitemap = async ({
 
     if (nextConfig && nextConfig.exportPathMap) {
       const { exportPathMap } = nextConfig;
-
       try {
         pathMap = await exportPathMap(pathMap, {});
       } catch (err) {
@@ -138,4 +142,4 @@ const getSitemap = async ({
   );
 };
 
-export { getUrlWithLocaleSubdomain, getXmlUrl, getPathMap, getSitemap };
+export { getLocalizedSubdomainUrl, getXmlUrl, getPathMap, getSitemap };
