@@ -1,5 +1,11 @@
 import fs from 'fs';
 import path from 'path';
+import {
+  getLocalizedSubdomainUrl,
+  getPathMap,
+  getSitemap,
+  getXmlUrl,
+} from './helpers';
 import IConfig, {
   ICoreConstructor,
   ICoreInterface,
@@ -10,12 +16,7 @@ import IConfig, {
   IWriteSitemap,
   IWriteXmlUrl,
 } from './types';
-import {
-  getPathMap,
-  getSitemap,
-  getLocalizedSubdomainUrl,
-  getXmlUrl,
-} from './utils';
+import { isExcludedPath } from './utils';
 
 class Core implements ICoreInterface {
   private xmlHeader = '<?xml version="1.0" encoding="UTF-8" ?>\n';
@@ -89,8 +90,18 @@ class Core implements ICoreInterface {
       isTrailingSlashRequired: this.isTrailingSlashRequired,
     });
 
+    const excludeFolders: string[] = [];
+    const excludeFiles = this.exclude.filter((item: string) => {
+      if (item.charAt(item.length - 1) === '*') {
+        excludeFolders.push(item);
+        return false;
+      }
+      return true;
+    });
+
     const filteredSitemap: ISitemapSite[] = sitemap.filter(
-      (url: ISitemapSite) => !this.exclude.includes(url.pagePath),
+      (url: ISitemapSite) =>
+        !isExcludedPath(url.pagePath, excludeFiles, excludeFolders),
     );
 
     this.writeHeader();
