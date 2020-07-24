@@ -2,7 +2,8 @@ import fs from 'fs';
 import path from 'path';
 import {
   getLocalizedSubdomainUrl,
-  getPathMap,
+  getPaths,
+  getPathsFromNextConfig,
   getSitemap,
   getXmlUrl,
 } from './helpers';
@@ -10,7 +11,6 @@ import IConfig, {
   ICoreConstructor,
   ICoreInterface,
   IPagesConfig,
-  IPathMap,
   ISitemapSite,
   ISitemapStylesheet,
   IWriteSitemap,
@@ -75,20 +75,14 @@ class Core implements ICoreInterface {
   }
 
   public generateSitemap = async (): Promise<void> => {
-    const pathMap: IPathMap = getPathMap({
-      folderPath: this.pagesDirectory,
-      rootPath: this.pagesDirectory,
-      excludeExtns: this.excludeExtensions,
-      excludeIdx: this.excludeIndex,
-    });
-
-    const sitemap: ISitemapSite[] = await getSitemap({
-      pathMap,
-      include: this.include,
-      pagesConfig: this.pagesConfig,
-      nextConfigPath: this.nextConfigPath,
-      isTrailingSlashRequired: this.isTrailingSlashRequired,
-    });
+    const paths: string[] = this.nextConfigPath
+      ? await getPathsFromNextConfig(this.nextConfigPath)
+      : getPaths({
+          folderPath: this.pagesDirectory,
+          rootPath: this.pagesDirectory,
+          excludeExtns: this.excludeExtensions,
+          excludeIdx: this.excludeIndex,
+        });
 
     const excludeFolders: string[] = [];
     const excludeFiles = this.exclude.filter((item: string) => {
@@ -99,14 +93,20 @@ class Core implements ICoreInterface {
       return true;
     });
 
-    const filteredSitemap: ISitemapSite[] = sitemap.filter(
-      (url: ISitemapSite) =>
-        !isExcludedPath(url.pagePath, excludeFiles, excludeFolders),
+    const filteredPaths: string[] = paths.filter(
+      (path: string) => !isExcludedPath(path, excludeFiles, excludeFolders),
     );
+
+    const sitemap: ISitemapSite[] = await getSitemap({
+      paths: filteredPaths,
+      include: this.include,
+      pagesConfig: this.pagesConfig,
+      isTrailingSlashRequired: this.isTrailingSlashRequired,
+    });
 
     this.writeHeader();
     this.writeSitemap({
-      sitemap: filteredSitemap,
+      sitemap,
     });
     this.writeFooter();
   };

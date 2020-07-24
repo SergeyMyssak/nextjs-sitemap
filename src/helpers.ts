@@ -1,13 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 import { format } from 'date-fns';
-import {
-  IGetPathMap,
-  IGetSitemap,
-  IGetXmlUrl,
-  IPathMap,
-  ISitemapSite,
-} from './types';
+import { IGetPathMap, IGetSitemap, IGetXmlUrl, ISitemapSite } from './types';
 import {
   splitFilenameAndExtn,
   appendTrailingSlash,
@@ -47,14 +41,14 @@ const getXmlUrl = ({
     </url>`;
 };
 
-const getPathMap = ({
+const getPaths = ({
   folderPath,
   rootPath,
   excludeExtns,
   excludeIdx,
-}: IGetPathMap): IPathMap => {
+}: IGetPathMap): string[] => {
   const fileNames: string[] = fs.readdirSync(folderPath);
-  let pathMap: IPathMap = {};
+  let paths: string[] = [];
 
   for (const fileName of fileNames) {
     if (isReservedPage(fileName)) continue;
@@ -63,16 +57,13 @@ const getPathMap = ({
     const isFolder = fs.lstatSync(nextPath).isDirectory();
 
     if (isFolder) {
-      const folderPathMap = getPathMap({
+      const pathsInFolder = getPaths({
         folderPath: nextPath,
         rootPath,
         excludeExtns,
         excludeIdx,
       });
-      pathMap = {
-        ...pathMap,
-        ...folderPathMap,
-      };
+      paths = [...paths, ...pathsInFolder];
       continue;
     }
 
@@ -86,41 +77,38 @@ const getPathMap = ({
     const pagePath = `${newFolderPath}/${
       excludeIdx && fileNameWithoutExtn === 'index' ? '' : fileNameWithoutExtn
     }`;
-
-    pathMap[pagePath] = {
-      page: pagePath,
-    };
+    paths.push(pagePath);
   }
 
-  return pathMap;
+  return paths;
+};
+
+const getPathsFromNextConfig = async (
+  nextConfigPath: string,
+): Promise<string[]> => {
+  let nextConfig = require(nextConfigPath);
+  if (typeof nextConfig === 'function') {
+    nextConfig = nextConfig([], {});
+  }
+
+  if (nextConfig && nextConfig.exportPathMap) {
+    const { exportPathMap } = nextConfig;
+
+    const pathMap = await exportPathMap({}, {});
+    return Object.keys(pathMap);
+  }
+
+  return [];
 };
 
 const getSitemap = async ({
-  pathMap,
+  paths,
   include,
   pagesConfig,
-  nextConfigPath,
   isTrailingSlashRequired,
 }: IGetSitemap): Promise<ISitemapSite[]> => {
-  if (nextConfigPath) {
-    let nextConfig = require(nextConfigPath);
-
-    if (typeof nextConfig === 'function') {
-      nextConfig = nextConfig([], {});
-    }
-
-    if (nextConfig && nextConfig.exportPathMap) {
-      const { exportPathMap } = nextConfig;
-      try {
-        pathMap = await exportPathMap(pathMap, {});
-      } catch (err) {
-        throw new Error('Export path map: ' + err);
-      }
-    }
-  }
-
-  const paths = [...Object.keys(pathMap), ...include];
-  return paths.map(
+  const newPaths = [...paths, ...include];
+  return newPaths.map(
     (pagePath: string): ISitemapSite => {
       const pageConfig = pagesConfig[pagePath];
       const priority = pageConfig?.priority ?? '';
@@ -135,4 +123,10 @@ const getSitemap = async ({
   );
 };
 
-export { getLocalizedSubdomainUrl, getXmlUrl, getPathMap, getSitemap };
+export {
+  getLocalizedSubdomainUrl,
+  getXmlUrl,
+  getPaths,
+  getPathsFromNextConfig,
+  getSitemap,
+};

@@ -34,12 +34,6 @@ export interface ISitemapStylesheet {
   styleFile: string;
 }
 
-export interface IPathMap {
-  [key: string]: {
-    page: string;
-  };
-}
-
 export interface ISitemapSite {
   pagePath: string;
   priority: string;
@@ -60,10 +54,9 @@ export interface IGetPathMap {
 }
 
 export interface IGetSitemap {
-  pathMap: IPathMap;
+  paths: string[];
   include: string[];
   pagesConfig: IPagesConfig;
-  nextConfigPath?: string;
   isTrailingSlashRequired: boolean;
 }
 
