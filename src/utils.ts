@@ -1,3 +1,16 @@
+const splitFoldersAndFiles = (data: string[]): string[][] => {
+  const folders: string[] = [];
+  const files = data.filter((item: string) => {
+    if (item.charAt(item.length - 1) === '*') {
+      folders.push(item);
+      return false;
+    }
+    return true;
+  });
+
+  return [folders, files];
+};
+
 const splitFilenameAndExtn = (filename: string): string[] => {
   const dotIndex = filename.lastIndexOf('.');
   return [
@@ -30,33 +43,33 @@ const isExcludedExtn = (
     (toIgnoreExtension: string) => toIgnoreExtension === fileExtension,
   );
 
-const isExcludedPath = (
-  pagePath: string,
-  excludeFiles: string[],
-  excludeFolders: string[],
-): boolean => {
-  if (excludeFiles.includes(pagePath)) return true;
+const findMatch = (
+  path: string,
+  folders: string[],
+  files: string[],
+): string | undefined => {
+  const foundFile: string | undefined = files.find(
+    (file: string) => file === path,
+  );
 
-  for (const excludeFolder of excludeFolders) {
+  if (foundFile) return foundFile;
+
+  for (const folder of folders) {
     // remove asterisk and trailing slash
-    const formattedExcludeFolder = excludeFolder.substring(
-      0,
-      excludeFolder.length - 2,
-    );
-    if (pagePath.includes(formattedExcludeFolder)) return true;
+    const formattedFolder = folder.substring(0, folder.length - 2);
+    if (path.includes(formattedFolder)) return folder;
   }
-
-  return false;
 };
 
 const isReservedPage = (pageName: string): boolean =>
   pageName.charAt(0) === '_' || pageName.charAt(0) === '.';
 
 export {
+  splitFoldersAndFiles,
   splitFilenameAndExtn,
   appendTrailingSlash,
   removeTrailingSlash,
+  findMatch,
   isExcludedExtn,
-  isExcludedPath,
   isReservedPage,
 };

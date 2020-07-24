@@ -3,9 +3,11 @@ import path from 'path';
 import { format } from 'date-fns';
 import { IGetPathMap, IGetSitemap, IGetXmlUrl, ISitemapSite } from './types';
 import {
+  splitFoldersAndFiles,
   splitFilenameAndExtn,
   appendTrailingSlash,
   removeTrailingSlash,
+  findMatch,
   isExcludedExtn,
   isReservedPage,
 } from './utils';
@@ -107,16 +109,20 @@ const getSitemap = async ({
   pagesConfig,
   isTrailingSlashRequired,
 }: IGetSitemap): Promise<ISitemapSite[]> => {
+  const pagesConfigKeys: string[] = Object.keys(pagesConfig);
+  const [foldersConfig, filesConfig] = splitFoldersAndFiles(pagesConfigKeys);
+
   const newPaths = [...paths, ...include];
   return newPaths.map(
     (pagePath: string): ISitemapSite => {
-      const pageConfig = pagesConfig[pagePath];
-      const priority = pageConfig?.priority ?? '';
-      const changefreq = pageConfig?.changefreq ?? '';
-
       const formattedPagePath = isTrailingSlashRequired
         ? appendTrailingSlash(pagePath)
         : removeTrailingSlash(pagePath);
+
+      const matchingPath = findMatch(pagePath, foldersConfig, filesConfig);
+      const pageConfig = matchingPath ? pagesConfig[matchingPath] : undefined;
+      const priority = pageConfig?.priority ?? '';
+      const changefreq = pageConfig?.changefreq ?? '';
 
       return { pagePath: formattedPagePath, priority, changefreq };
     },

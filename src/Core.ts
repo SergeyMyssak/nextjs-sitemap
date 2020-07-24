@@ -16,7 +16,7 @@ import IConfig, {
   IWriteSitemap,
   IWriteXmlUrl,
 } from './types';
-import { isExcludedPath } from './utils';
+import { splitFoldersAndFiles, findMatch } from './utils';
 
 class Core implements ICoreInterface {
   private xmlHeader = '<?xml version="1.0" encoding="UTF-8" ?>\n';
@@ -84,17 +84,9 @@ class Core implements ICoreInterface {
           excludeIdx: this.excludeIndex,
         });
 
-    const excludeFolders: string[] = [];
-    const excludeFiles = this.exclude.filter((item: string) => {
-      if (item.charAt(item.length - 1) === '*') {
-        excludeFolders.push(item);
-        return false;
-      }
-      return true;
-    });
-
+    const [excludeFolders, excludeFiles] = splitFoldersAndFiles(this.exclude);
     const filteredPaths: string[] = paths.filter(
-      (path: string) => !isExcludedPath(path, excludeFiles, excludeFolders),
+      (path: string) => !findMatch(path, excludeFolders, excludeFiles),
     );
 
     const sitemap: ISitemapSite[] = await getSitemap({
