@@ -5,8 +5,8 @@
   "main": "dist/Core.js",
   "types": "dist/Core.d.ts",
   "scripts": {
-    "start": "tsc && lint",
-    "lint": "eslint '*/**/*.{js,ts}' --quiet --fix"
+    "lint": "eslint '*src/**/*.{js,ts}' --quiet --fix",
+    "start": "tsc && yarn lint && node sitemap-generator.js"
   },
   "keywords": [
     "next.js",
