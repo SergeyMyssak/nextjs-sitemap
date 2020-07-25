@@ -3,7 +3,7 @@ export interface ICoreConstructor {
 }
 
 export interface ICoreInterface {
-  generateSitemap: () => void;
+  generateSitemap: () => Promise<void>;
 }
 
 interface IConfig {
