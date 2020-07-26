@@ -1,29 +1,8 @@
-import {
-  IGetPathMap,
-  IGetSitemap,
-  IGetXmlUrl,
-  IPathMap,
-  ISitemapSite,
-} from './types';
-declare const getUrlWithLocaleSubdomain: (
-  baseUrl: string,
-  lang: string,
-) => string;
-declare const getXmlUrl: ({
-  baseUrl,
-  url,
-  alternateUrls,
-}: IGetXmlUrl) => string;
-declare const getPathMap: ({
-  folderPath,
-  rootPath,
-  excludeExtns,
-  excludeIdx,
-}: IGetPathMap) => IPathMap;
-declare const getSitemap: ({
-  pathMap,
-  include,
-  pagesConfig,
-  nextConfigPath,
-}: IGetSitemap) => Promise<ISitemapSite[]>;
-export { getUrlWithLocaleSubdomain, getXmlUrl, getPathMap, getSitemap };
+declare const splitFoldersAndFiles: (data: string[]) => string[][];
+declare const splitFilenameAndExtn: (filename: string) => string[];
+declare const appendTrailingSlash: (pagePath: string) => string;
+declare const removeTrailingSlash: (pagePath: string) => string;
+declare const isExcludedExtn: (fileExtension: string, excludeExtensions: string[]) => boolean;
+declare const findMatch: (path: string, folders: string[], files: string[]) => string | undefined;
+declare const isReservedPage: (pageName: string) => boolean;
+export { splitFoldersAndFiles, splitFilenameAndExtn, appendTrailingSlash, removeTrailingSlash, findMatch, isExcludedExtn, isReservedPage, };
