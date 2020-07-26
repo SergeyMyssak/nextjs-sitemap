@@ -5,17 +5,31 @@
     xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
     xmlns:xhtml="http://www.w3.org/1999/xhtml">
     <url>
-        <loc>https://example.com/about</loc>
-        <lastmod>2020-07-04</lastmod>
+        <loc>https://example.com/</loc>
+        <lastmod>2020-07-26</lastmod>
+    </url>
+    <url>
+        <loc>https://example.com/projects/computers/laptop/</loc>
+        <lastmod>2020-07-26</lastmod>
         <changefreq>daily</changefreq>
         <priority>0.5</priority>
     </url>
     <url>
-        <loc>https://example.com</loc>
-        <lastmod>2020-07-04</lastmod>
+        <loc>https://example.com/projects/computers/pc/</loc>
+        <lastmod>2020-07-26</lastmod>
+        <changefreq>daily</changefreq>
+        <priority>0.5</priority>
     </url>
     <url>
-        <loc>https://example.com/works</loc>
-        <lastmod>2020-07-04</lastmod>
+        <loc>https://example.com/projects/phones/android/</loc>
+        <lastmod>2020-07-26</lastmod>
+        <changefreq>daily</changefreq>
+        <priority>0.5</priority>
+    </url>
+    <url>
+        <loc>https://example.com/projects/phones/ios/</loc>
+        <lastmod>2020-07-26</lastmod>
+        <changefreq>daily</changefreq>
+        <priority>0.5</priority>
     </url>
 </urlset>

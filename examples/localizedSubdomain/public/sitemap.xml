@@ -5,66 +5,66 @@
     xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
     xmlns:xhtml="http://www.w3.org/1999/xhtml">
     <url>
-        <loc>https://en.example.com/about</loc>
-        <lastmod>2020-07-04</lastmod>
-		<xhtml:link rel="alternate" hreflang="en" href="https://en.example.com/about" />
-		<xhtml:link rel="alternate" hreflang="es" href="https://es.example.com/about" />
-		<xhtml:link rel="alternate" hreflang="ru" href="https://ru.example.com/about" />
+        <loc>https://en.example.com/about/</loc>
+        <lastmod>2020-07-26</lastmod>
+		<xhtml:link rel="alternate" hreflang="en" href="https://en.example.com/about/" />
+		<xhtml:link rel="alternate" hreflang="es" href="https://es.example.com/about/" />
+		<xhtml:link rel="alternate" hreflang="ru" href="https://ru.example.com/about/" />
     </url>
     <url>
-        <loc>https://en.example.com</loc>
-        <lastmod>2020-07-04</lastmod>
-		<xhtml:link rel="alternate" hreflang="en" href="https://en.example.com" />
-		<xhtml:link rel="alternate" hreflang="es" href="https://es.example.com" />
-		<xhtml:link rel="alternate" hreflang="ru" href="https://ru.example.com" />
+        <loc>https://en.example.com/</loc>
+        <lastmod>2020-07-26</lastmod>
+		<xhtml:link rel="alternate" hreflang="en" href="https://en.example.com/" />
+		<xhtml:link rel="alternate" hreflang="es" href="https://es.example.com/" />
+		<xhtml:link rel="alternate" hreflang="ru" href="https://ru.example.com/" />
     </url>
     <url>
-        <loc>https://en.example.com/works</loc>
-        <lastmod>2020-07-04</lastmod>
-		<xhtml:link rel="alternate" hreflang="en" href="https://en.example.com/works" />
-		<xhtml:link rel="alternate" hreflang="es" href="https://es.example.com/works" />
-		<xhtml:link rel="alternate" hreflang="ru" href="https://ru.example.com/works" />
+        <loc>https://en.example.com/works/</loc>
+        <lastmod>2020-07-26</lastmod>
+		<xhtml:link rel="alternate" hreflang="en" href="https://en.example.com/works/" />
+		<xhtml:link rel="alternate" hreflang="es" href="https://es.example.com/works/" />
+		<xhtml:link rel="alternate" hreflang="ru" href="https://ru.example.com/works/" />
     </url>
     <url>
-        <loc>https://es.example.com/about</loc>
-        <lastmod>2020-07-04</lastmod>
-		<xhtml:link rel="alternate" hreflang="en" href="https://en.example.com/about" />
-		<xhtml:link rel="alternate" hreflang="es" href="https://es.example.com/about" />
-		<xhtml:link rel="alternate" hreflang="ru" href="https://ru.example.com/about" />
+        <loc>https://es.example.com/about/</loc>
+        <lastmod>2020-07-26</lastmod>
+		<xhtml:link rel="alternate" hreflang="en" href="https://en.example.com/about/" />
+		<xhtml:link rel="alternate" hreflang="es" href="https://es.example.com/about/" />
+		<xhtml:link rel="alternate" hreflang="ru" href="https://ru.example.com/about/" />
     </url>
     <url>
-        <loc>https://es.example.com</loc>
-        <lastmod>2020-07-04</lastmod>
-		<xhtml:link rel="alternate" hreflang="en" href="https://en.example.com" />
-		<xhtml:link rel="alternate" hreflang="es" href="https://es.example.com" />
-		<xhtml:link rel="alternate" hreflang="ru" href="https://ru.example.com" />
+        <loc>https://es.example.com/</loc>
+        <lastmod>2020-07-26</lastmod>
+		<xhtml:link rel="alternate" hreflang="en" href="https://en.example.com/" />
+		<xhtml:link rel="alternate" hreflang="es" href="https://es.example.com/" />
+		<xhtml:link rel="alternate" hreflang="ru" href="https://ru.example.com/" />
     </url>
     <url>
-        <loc>https://es.example.com/works</loc>
-        <lastmod>2020-07-04</lastmod>
-		<xhtml:link rel="alternate" hreflang="en" href="https://en.example.com/works" />
-		<xhtml:link rel="alternate" hreflang="es" href="https://es.example.com/works" />
-		<xhtml:link rel="alternate" hreflang="ru" href="https://ru.example.com/works" />
+        <loc>https://es.example.com/works/</loc>
+        <lastmod>2020-07-26</lastmod>
+		<xhtml:link rel="alternate" hreflang="en" href="https://en.example.com/works/" />
+		<xhtml:link rel="alternate" hreflang="es" href="https://es.example.com/works/" />
+		<xhtml:link rel="alternate" hreflang="ru" href="https://ru.example.com/works/" />
     </url>
     <url>
-        <loc>https://ru.example.com/about</loc>
-        <lastmod>2020-07-04</lastmod>
-		<xhtml:link rel="alternate" hreflang="en" href="https://en.example.com/about" />
-		<xhtml:link rel="alternate" hreflang="es" href="https://es.example.com/about" />
-		<xhtml:link rel="alternate" hreflang="ru" href="https://ru.example.com/about" />
+        <loc>https://ru.example.com/about/</loc>
+        <lastmod>2020-07-26</lastmod>
+		<xhtml:link rel="alternate" hreflang="en" href="https://en.example.com/about/" />
+		<xhtml:link rel="alternate" hreflang="es" href="https://es.example.com/about/" />
+		<xhtml:link rel="alternate" hreflang="ru" href="https://ru.example.com/about/" />
     </url>
     <url>
-        <loc>https://ru.example.com</loc>
-        <lastmod>2020-07-04</lastmod>
-		<xhtml:link rel="alternate" hreflang="en" href="https://en.example.com" />
-		<xhtml:link rel="alternate" hreflang="es" href="https://es.example.com" />
-		<xhtml:link rel="alternate" hreflang="ru" href="https://ru.example.com" />
+        <loc>https://ru.example.com/</loc>
+        <lastmod>2020-07-26</lastmod>
+		<xhtml:link rel="alternate" hreflang="en" href="https://en.example.com/" />
+		<xhtml:link rel="alternate" hreflang="es" href="https://es.example.com/" />
+		<xhtml:link rel="alternate" hreflang="ru" href="https://ru.example.com/" />
     </url>
     <url>
-        <loc>https://ru.example.com/works</loc>
-        <lastmod>2020-07-04</lastmod>
-		<xhtml:link rel="alternate" hreflang="en" href="https://en.example.com/works" />
-		<xhtml:link rel="alternate" hreflang="es" href="https://es.example.com/works" />
-		<xhtml:link rel="alternate" hreflang="ru" href="https://ru.example.com/works" />
+        <loc>https://ru.example.com/works/</loc>
+        <lastmod>2020-07-26</lastmod>
+		<xhtml:link rel="alternate" hreflang="en" href="https://en.example.com/works/" />
+		<xhtml:link rel="alternate" hreflang="es" href="https://es.example.com/works/" />
+		<xhtml:link rel="alternate" hreflang="ru" href="https://ru.example.com/works/" />
     </url>
 </urlset>

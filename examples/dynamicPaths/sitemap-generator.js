@@ -9,7 +9,15 @@ getDynamicPaths().then((paths) => {
   const Sitemap = configureSitemap({
     baseUrl: 'https://example.com',
     include: paths,
-    exclude: ['/project/[id]'],
+    exclude: ['/project/*'],
+    excludeIndex: true,
+    pagesConfig: {
+      '/project/*': {
+        priority: '0.5',
+        changefreq: 'daily',
+      },
+    },
+    isTrailingSlashRequired: true,
     targetDirectory: __dirname + '/public',
     pagesDirectory: __dirname + '/src/pages',
   });
