@@ -6,7 +6,7 @@
   "types": "dist/Core.d.ts",
   "scripts": {
     "lint": "eslint '*src/**/*.{js,ts}' --quiet --fix",
-    "start": "tsc && yarn lint && node sitemap-generator.js"
+    "start": "tsc && yarn lint"
   },
   "keywords": [
     "next.js",
