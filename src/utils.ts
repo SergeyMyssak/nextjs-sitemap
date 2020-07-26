@@ -55,8 +55,8 @@ const findMatch = (
   if (foundFile) return foundFile;
 
   for (const folder of folders) {
-    // remove asterisk and trailing slash
-    const formattedFolder = folder.substring(0, folder.length - 2);
+    // remove asterisk
+    const formattedFolder = folder.substring(0, folder.length - 1);
     if (path.includes(formattedFolder)) return folder;
   }
 };
