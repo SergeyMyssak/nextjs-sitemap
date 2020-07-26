@@ -1,6 +1,6 @@
 {
   "name": "@sergeymyssak/nextjs-sitemap",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Generate dynamic sitemap.xml for Next.js project!",
   "main": "dist/Core.js",
   "types": "dist/Core.d.ts",
