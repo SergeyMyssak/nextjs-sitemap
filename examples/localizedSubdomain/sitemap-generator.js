@@ -1,11 +1,12 @@
 const { configureSitemap } = require('@sergeymyssak/nextjs-sitemap');
 
 const Sitemap = configureSitemap({
-  baseUrl: 'https://example.com',
+  domains: [
+    { domain: 'example.com', defaultLocale: 'en', locales: ['en-US', 'en-CA'] },
+    { domain: 'es.example.com', defaultLocale: 'es' },
+  ],
   excludeIndex: true,
-  langs: ['en', 'es', 'ru'],
-  isSubdomain: true,
-  isTrailingSlashRequired: true,
+  trailingSlash: true,
   targetDirectory: __dirname + '/public',
   pagesDirectory: __dirname + '/src/pages',
 });

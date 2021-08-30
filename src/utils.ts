@@ -19,21 +19,24 @@ const splitFilenameAndExtn = (filename: string): string[] => {
   ];
 };
 
-const appendTrailingSlash = (pagePath: string): string => {
-  const lastChar = pagePath.charAt(pagePath.length - 1);
+const appendTrailingSlash = (str: string): string => {
+  const lastChar = str.charAt(str.length - 1);
   if (lastChar === '/') {
-    return pagePath;
+    return str;
   }
-  return pagePath + '/';
+  return str + '/';
 };
 
-const removeTrailingSlash = (pagePath: string): string => {
-  const lastChar = pagePath.charAt(pagePath.length - 1);
+const removeTrailingSlash = (str: string): string => {
+  const lastChar = str.charAt(str.length - 1);
   if (lastChar === '/') {
-    return pagePath.substring(0, pagePath.length - 1);
+    return str.substring(0, str.length - 1);
   }
-  return pagePath;
+  return str;
 };
+
+const normalizeTrailingSlash = (str: string, trailingSlash: boolean): string =>
+  trailingSlash ? appendTrailingSlash(str) : removeTrailingSlash(str);
 
 const isExcludedExtn = (
   fileExtension: string,
@@ -52,12 +55,16 @@ const findMatch = (
     (file: string) => file === path,
   );
 
-  if (foundFile) return foundFile;
+  if (foundFile) {
+    return foundFile;
+  }
 
   for (const folder of folders) {
     // remove asterisk
     const formattedFolder = folder.substring(0, folder.length - 1);
-    if (path.includes(formattedFolder)) return folder;
+    if (path.includes(formattedFolder)) {
+      return folder;
+    }
   }
 };
 
@@ -69,6 +76,7 @@ export {
   splitFilenameAndExtn,
   appendTrailingSlash,
   removeTrailingSlash,
+  normalizeTrailingSlash,
   findMatch,
   isExcludedExtn,
   isReservedPage,

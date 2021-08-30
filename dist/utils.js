@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.isReservedPage = exports.isExcludedExtn = exports.findMatch = exports.removeTrailingSlash = exports.appendTrailingSlash = exports.splitFilenameAndExtn = exports.splitFoldersAndFiles = void 0;
+exports.isReservedPage = exports.isExcludedExtn = exports.findMatch = exports.normalizeTrailingSlash = exports.removeTrailingSlash = exports.appendTrailingSlash = exports.splitFilenameAndExtn = exports.splitFoldersAndFiles = void 0;
 const splitFoldersAndFiles = (data) => {
     const folders = [];
     const files = data.filter((item) => {
@@ -21,33 +21,37 @@ const splitFilenameAndExtn = (filename) => {
     ];
 };
 exports.splitFilenameAndExtn = splitFilenameAndExtn;
-const appendTrailingSlash = (pagePath) => {
-    const lastChar = pagePath.charAt(pagePath.length - 1);
+const appendTrailingSlash = (str) => {
+    const lastChar = str.charAt(str.length - 1);
     if (lastChar === '/') {
-        return pagePath;
+        return str;
     }
-    return pagePath + '/';
+    return str + '/';
 };
 exports.appendTrailingSlash = appendTrailingSlash;
-const removeTrailingSlash = (pagePath) => {
-    const lastChar = pagePath.charAt(pagePath.length - 1);
+const removeTrailingSlash = (str) => {
+    const lastChar = str.charAt(str.length - 1);
     if (lastChar === '/') {
-        return pagePath.substring(0, pagePath.length - 1);
+        return str.substring(0, str.length - 1);
     }
-    return pagePath;
+    return str;
 };
 exports.removeTrailingSlash = removeTrailingSlash;
+const normalizeTrailingSlash = (str, trailingSlash) => trailingSlash ? appendTrailingSlash(str) : removeTrailingSlash(str);
+exports.normalizeTrailingSlash = normalizeTrailingSlash;
 const isExcludedExtn = (fileExtension, excludeExtensions) => excludeExtensions.some((toIgnoreExtension) => toIgnoreExtension === fileExtension);
 exports.isExcludedExtn = isExcludedExtn;
 const findMatch = (path, folders, files) => {
     const foundFile = files.find((file) => file === path);
-    if (foundFile)
+    if (foundFile) {
         return foundFile;
+    }
     for (const folder of folders) {
         // remove asterisk
         const formattedFolder = folder.substring(0, folder.length - 1);
-        if (path.includes(formattedFolder))
+        if (path.includes(formattedFolder)) {
             return folder;
+        }
     }
 };
 exports.findMatch = findMatch;

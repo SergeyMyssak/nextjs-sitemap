@@ -1,13 +1,18 @@
 const { configureSitemap } = require('@sergeymyssak/nextjs-sitemap');
 
+async function fetchDynamicPaths() {
+  return ['house', 'flower', 'table'];
+}
+
 async function getDynamicPaths() {
-  const data = ['house', 'flower', 'table'];
-  return data.map((item) => `/project/${item}`);
+  const paths = await fetchDynamicPaths();
+
+  return paths.map((item) => `/project/${item}`);
 }
 
 getDynamicPaths().then((paths) => {
   const Sitemap = configureSitemap({
-    baseUrl: 'https://example.com',
+    domains: [{ domain: 'example.com', defaultLocale: 'en' }],
     include: paths,
     exclude: ['/project/*'],
     excludeIndex: true,
@@ -17,7 +22,7 @@ getDynamicPaths().then((paths) => {
         changefreq: 'daily',
       },
     },
-    isTrailingSlashRequired: true,
+    trailingSlash: true,
     targetDirectory: __dirname + '/public',
     pagesDirectory: __dirname + '/src/pages',
   });

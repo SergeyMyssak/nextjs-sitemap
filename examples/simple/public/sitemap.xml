@@ -5,31 +5,79 @@
     xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
     xmlns:xhtml="http://www.w3.org/1999/xhtml">
     <url>
-        <loc>https://example.com/</loc>
-        <lastmod>2020-07-26</lastmod>
+        <loc>http://example.com/en/</loc>
+        <lastmod>2021-08-30</lastmod>
+		<xhtml:link rel="alternate" hreflang="en" href="http://example.com/en/" />
+		<xhtml:link rel="alternate" hreflang="es" href="http://example.com/es/" />
     </url>
     <url>
-        <loc>https://example.com/projects/computers/laptop/</loc>
-        <lastmod>2020-07-26</lastmod>
-        <changefreq>daily</changefreq>
-        <priority>0.5</priority>
+        <loc>http://example.com/es/</loc>
+        <lastmod>2021-08-30</lastmod>
+		<xhtml:link rel="alternate" hreflang="en" href="http://example.com/en/" />
+		<xhtml:link rel="alternate" hreflang="es" href="http://example.com/es/" />
     </url>
     <url>
-        <loc>https://example.com/projects/computers/pc/</loc>
-        <lastmod>2020-07-26</lastmod>
+        <loc>http://example.com/en/projects/computers/laptop/</loc>
+        <lastmod>2021-08-30</lastmod>
         <changefreq>daily</changefreq>
         <priority>0.5</priority>
+		<xhtml:link rel="alternate" hreflang="en" href="http://example.com/en/projects/computers/laptop/" />
+		<xhtml:link rel="alternate" hreflang="es" href="http://example.com/es/projects/computers/laptop/" />
     </url>
     <url>
-        <loc>https://example.com/projects/phones/android/</loc>
-        <lastmod>2020-07-26</lastmod>
+        <loc>http://example.com/es/projects/computers/laptop/</loc>
+        <lastmod>2021-08-30</lastmod>
         <changefreq>daily</changefreq>
         <priority>0.5</priority>
+		<xhtml:link rel="alternate" hreflang="en" href="http://example.com/en/projects/computers/laptop/" />
+		<xhtml:link rel="alternate" hreflang="es" href="http://example.com/es/projects/computers/laptop/" />
     </url>
     <url>
-        <loc>https://example.com/projects/phones/ios/</loc>
-        <lastmod>2020-07-26</lastmod>
+        <loc>http://example.com/en/projects/computers/pc/</loc>
+        <lastmod>2021-08-30</lastmod>
         <changefreq>daily</changefreq>
         <priority>0.5</priority>
+		<xhtml:link rel="alternate" hreflang="en" href="http://example.com/en/projects/computers/pc/" />
+		<xhtml:link rel="alternate" hreflang="es" href="http://example.com/es/projects/computers/pc/" />
+    </url>
+    <url>
+        <loc>http://example.com/es/projects/computers/pc/</loc>
+        <lastmod>2021-08-30</lastmod>
+        <changefreq>daily</changefreq>
+        <priority>0.5</priority>
+		<xhtml:link rel="alternate" hreflang="en" href="http://example.com/en/projects/computers/pc/" />
+		<xhtml:link rel="alternate" hreflang="es" href="http://example.com/es/projects/computers/pc/" />
+    </url>
+    <url>
+        <loc>http://example.com/en/projects/phones/android/</loc>
+        <lastmod>2021-08-30</lastmod>
+        <changefreq>daily</changefreq>
+        <priority>0.5</priority>
+		<xhtml:link rel="alternate" hreflang="en" href="http://example.com/en/projects/phones/android/" />
+		<xhtml:link rel="alternate" hreflang="es" href="http://example.com/es/projects/phones/android/" />
+    </url>
+    <url>
+        <loc>http://example.com/es/projects/phones/android/</loc>
+        <lastmod>2021-08-30</lastmod>
+        <changefreq>daily</changefreq>
+        <priority>0.5</priority>
+		<xhtml:link rel="alternate" hreflang="en" href="http://example.com/en/projects/phones/android/" />
+		<xhtml:link rel="alternate" hreflang="es" href="http://example.com/es/projects/phones/android/" />
+    </url>
+    <url>
+        <loc>http://example.com/en/projects/phones/ios/</loc>
+        <lastmod>2021-08-30</lastmod>
+        <changefreq>daily</changefreq>
+        <priority>0.5</priority>
+		<xhtml:link rel="alternate" hreflang="en" href="http://example.com/en/projects/phones/ios/" />
+		<xhtml:link rel="alternate" hreflang="es" href="http://example.com/es/projects/phones/ios/" />
+    </url>
+    <url>
+        <loc>http://example.com/es/projects/phones/ios/</loc>
+        <lastmod>2021-08-30</lastmod>
+        <changefreq>daily</changefreq>
+        <priority>0.5</priority>
+		<xhtml:link rel="alternate" hreflang="en" href="http://example.com/en/projects/phones/ios/" />
+		<xhtml:link rel="alternate" hreflang="es" href="http://example.com/es/projects/phones/ios/" />
     </url>
 </urlset>

@@ -12,19 +12,14 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getSitemap = exports.getPathsFromNextConfig = exports.getPaths = exports.getXmlUrl = exports.getLocalizedSubdomainUrl = void 0;
+exports.getAlternativePath = exports.getBaseUrl = exports.getSitemap = exports.getPathsFromNextConfig = exports.getPathsFromDirectory = exports.getXmlUrl = void 0;
 const fs_1 = __importDefault(require("fs"));
 const path_1 = __importDefault(require("path"));
 const date_fns_1 = require("date-fns");
 const utils_1 = require("./utils");
-const getLocalizedSubdomainUrl = (baseUrl, lang) => {
-    const protocolAndHostname = baseUrl.split('//');
-    protocolAndHostname[1] = `${lang}.${protocolAndHostname[1]}`;
-    return protocolAndHostname.join('//');
-};
-exports.getLocalizedSubdomainUrl = getLocalizedSubdomainUrl;
-const getXmlUrl = ({ baseUrl, url, alternateUrls = '', }) => {
-    const { pagePath, priority, changefreq } = url;
+const getXmlUrl = ({ baseUrl, route, alternativeUrls = '', trailingSlash, }) => {
+    const { pagePath, priority, changefreq } = route;
+    const loc = utils_1.normalizeTrailingSlash(`${baseUrl}${pagePath}`, trailingSlash);
     const date = date_fns_1.format(new Date(), 'yyyy-MM-dd');
     const xmlChangefreq = changefreq
         ? `
@@ -36,47 +31,47 @@ const getXmlUrl = ({ baseUrl, url, alternateUrls = '', }) => {
         : '';
     return `
     <url>
-        <loc>${baseUrl}${pagePath}</loc>
-        <lastmod>${date}</lastmod>${xmlChangefreq}${xmlPriority}${alternateUrls}
+        <loc>${loc}</loc>
+        <lastmod>${date}</lastmod>${xmlChangefreq}${xmlPriority}${alternativeUrls}
     </url>`;
 };
 exports.getXmlUrl = getXmlUrl;
-const getPaths = ({ folderPath, rootPath, excludeExtns, excludeIdx, }) => {
-    const fileNames = fs_1.default.readdirSync(folderPath);
+const getPathsFromDirectory = ({ rootPath, directoryPath, excludeExtns, excludeIdx, }) => {
+    const fileNames = fs_1.default.readdirSync(directoryPath);
     let paths = [];
     for (const fileName of fileNames) {
         if (utils_1.isReservedPage(fileName))
             continue;
-        const nextPath = folderPath + path_1.default.sep + fileName;
+        const nextPath = directoryPath + path_1.default.sep + fileName;
         const isFolder = fs_1.default.lstatSync(nextPath).isDirectory();
         if (isFolder) {
-            const pathsInFolder = getPaths({
-                folderPath: nextPath,
+            const directoryPaths = getPathsFromDirectory({
                 rootPath,
+                directoryPath: nextPath,
                 excludeExtns,
                 excludeIdx,
             });
-            paths = [...paths, ...pathsInFolder];
+            paths = [...paths, ...directoryPaths];
             continue;
         }
         const [fileNameWithoutExtn, fileExtn] = utils_1.splitFilenameAndExtn(fileName);
         if (utils_1.isExcludedExtn(fileExtn, excludeExtns))
             continue;
-        const newFolderPath = folderPath
+        const newDirectoryPath = directoryPath
             .replace(rootPath, '')
             .replace(path_1.default.sep, '/');
-        const pagePath = `${newFolderPath}/${excludeIdx && fileNameWithoutExtn === 'index' ? '' : fileNameWithoutExtn}`;
+        const pagePath = `${newDirectoryPath}/${excludeIdx && fileNameWithoutExtn === 'index' ? '' : fileNameWithoutExtn}`;
         paths.push(pagePath);
     }
     return paths;
 };
-exports.getPaths = getPaths;
+exports.getPathsFromDirectory = getPathsFromDirectory;
 const getPathsFromNextConfig = (nextConfigPath) => __awaiter(void 0, void 0, void 0, function* () {
     let nextConfig = require(nextConfigPath);
     if (typeof nextConfig === 'function') {
         nextConfig = nextConfig([], {});
     }
-    if (nextConfig && nextConfig.exportPathMap) {
+    if (nextConfig === null || nextConfig === void 0 ? void 0 : nextConfig.exportPathMap) {
         const { exportPathMap } = nextConfig;
         const pathMap = yield exportPathMap({}, {});
         return Object.keys(pathMap);
@@ -84,20 +79,25 @@ const getPathsFromNextConfig = (nextConfigPath) => __awaiter(void 0, void 0, voi
     return [];
 });
 exports.getPathsFromNextConfig = getPathsFromNextConfig;
-const getSitemap = ({ paths, include, pagesConfig, isTrailingSlashRequired, }) => __awaiter(void 0, void 0, void 0, function* () {
+const getSitemap = ({ paths, pagesConfig }) => {
     const pagesConfigKeys = Object.keys(pagesConfig);
     const [foldersConfig, filesConfig] = utils_1.splitFoldersAndFiles(pagesConfigKeys);
-    const newPaths = [...paths, ...include];
-    return newPaths.map((pagePath) => {
+    return paths.map((pagePath) => {
         var _a, _b;
-        const formattedPagePath = isTrailingSlashRequired
-            ? utils_1.appendTrailingSlash(pagePath)
-            : utils_1.removeTrailingSlash(pagePath);
         const matchingPath = utils_1.findMatch(pagePath, foldersConfig, filesConfig);
         const pageConfig = matchingPath ? pagesConfig[matchingPath] : undefined;
         const priority = (_a = pageConfig === null || pageConfig === void 0 ? void 0 : pageConfig.priority) !== null && _a !== void 0 ? _a : '';
         const changefreq = (_b = pageConfig === null || pageConfig === void 0 ? void 0 : pageConfig.changefreq) !== null && _b !== void 0 ? _b : '';
-        return { pagePath: formattedPagePath, priority, changefreq };
+        return { pagePath, priority, changefreq };
     });
-});
+};
 exports.getSitemap = getSitemap;
+const getBaseUrl = ({ domain, http }) => `${http ? 'http' : 'https'}://${domain}`;
+exports.getBaseUrl = getBaseUrl;
+const getAlternativePath = ({ baseUrl, route, hreflang, lang = '', trailingSlash, }) => {
+    const normalizedBaseUrl = utils_1.normalizeTrailingSlash(baseUrl, !!lang);
+    const href = `${normalizedBaseUrl}${lang}${route}`;
+    const normalizedHref = utils_1.normalizeTrailingSlash(href, trailingSlash);
+    return `\n\t\t<xhtml:link rel="alternate" hreflang="${hreflang}" href="${normalizedHref}" />`;
+};
+exports.getAlternativePath = getAlternativePath;

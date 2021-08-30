@@ -1,8 +1,9 @@
 import fs from 'fs';
 import path from 'path';
 import {
-  getLocalizedSubdomainUrl,
-  getPaths,
+  getAlternativePath,
+  getBaseUrl,
+  getPathsFromDirectory,
   getPathsFromNextConfig,
   getSitemap,
   getXmlUrl,
@@ -10,6 +11,7 @@ import {
 import IConfig, {
   ICoreConstructor,
   ICoreInterface,
+  IDomain,
   IPagesConfig,
   ISitemapSite,
   ISitemapStylesheet,
@@ -26,14 +28,12 @@ class Core implements ICoreInterface {
     xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
     xmlns:xhtml="http://www.w3.org/1999/xhtml">`;
 
-  private baseUrl: string;
+  private domains: IDomain[];
   private exclude: string[];
   private excludeExtensions: string[];
   private excludeIndex: boolean;
   private include: string[];
-  private isSubdomain: boolean;
-  private isTrailingSlashRequired: boolean;
-  private langs?: string[];
+  private trailingSlash: boolean;
   private nextConfigPath?: string;
   private pagesConfig: IPagesConfig;
   private pagesDirectory: string;
@@ -44,14 +44,12 @@ class Core implements ICoreInterface {
     if (!config) throw new Error('Config is mandatory');
 
     const {
-      baseUrl,
+      domains = [],
       exclude = [],
       excludeExtensions = [],
       excludeIndex = true,
       include = [],
-      isSubdomain = false,
-      isTrailingSlashRequired = false,
-      langs,
+      trailingSlash = false,
       nextConfigPath,
       pagesConfig = {},
       pagesDirectory,
@@ -59,14 +57,12 @@ class Core implements ICoreInterface {
       targetDirectory,
     } = config;
 
-    this.baseUrl = baseUrl;
+    this.domains = domains;
     this.include = include;
     this.excludeExtensions = excludeExtensions;
     this.exclude = exclude;
     this.excludeIndex = excludeIndex;
-    this.isSubdomain = isSubdomain;
-    this.isTrailingSlashRequired = isTrailingSlashRequired;
-    this.langs = langs;
+    this.trailingSlash = trailingSlash;
     this.nextConfigPath = nextConfigPath;
     this.pagesConfig = pagesConfig;
     this.pagesDirectory = pagesDirectory;
@@ -77,9 +73,9 @@ class Core implements ICoreInterface {
   public generateSitemap = async (): Promise<void> => {
     const paths: string[] = this.nextConfigPath
       ? await getPathsFromNextConfig(this.nextConfigPath)
-      : getPaths({
-          folderPath: this.pagesDirectory,
+      : getPathsFromDirectory({
           rootPath: this.pagesDirectory,
+          directoryPath: this.pagesDirectory,
           excludeExtns: this.excludeExtensions,
           excludeIdx: this.excludeIndex,
         });
@@ -89,17 +85,13 @@ class Core implements ICoreInterface {
       (path: string) => !findMatch(path, excludeFolders, excludeFiles),
     );
 
-    const sitemap: ISitemapSite[] = await getSitemap({
-      paths: filteredPaths,
-      include: this.include,
+    const sitemap: ISitemapSite[] = getSitemap({
+      paths: [...filteredPaths, ...this.include],
       pagesConfig: this.pagesConfig,
-      isTrailingSlashRequired: this.isTrailingSlashRequired,
     });
 
     this.writeHeader();
-    this.writeSitemap({
-      sitemap,
-    });
+    this.writeSitemap({ sitemap });
     this.writeFooter();
   };
 
@@ -119,49 +111,57 @@ class Core implements ICoreInterface {
   };
 
   private writeSitemap = ({ sitemap }: IWriteSitemap): void => {
-    if (!this.langs) {
-      sitemap.forEach((url: ISitemapSite): void => {
-        this.writeXmlUrl({
-          baseUrl: this.baseUrl,
-          url,
+    this.domains.forEach(({ domain, defaultLocale, locales, http }): void => {
+      const baseUrl = getBaseUrl({ domain, http });
+
+      sitemap.forEach((route: ISitemapSite): void => {
+        let alternativeUrls = defaultLocale
+          ? getAlternativePath({
+              baseUrl,
+              route: route.pagePath,
+              hreflang: defaultLocale,
+              trailingSlash: this.trailingSlash,
+            })
+          : '';
+
+        locales?.forEach((alternativeLang: string): void => {
+          alternativeUrls += getAlternativePath({
+            baseUrl,
+            route: route.pagePath,
+            hreflang: alternativeLang,
+            lang: alternativeLang,
+            trailingSlash: this.trailingSlash,
+          });
         });
-      });
-      return;
-    }
 
-    this.langs.forEach((lang: string): void => {
-      const localizedBaseUrl = this.isSubdomain
-        ? getLocalizedSubdomainUrl(this.baseUrl, lang)
-        : `${this.baseUrl}/${lang}`;
+        if (defaultLocale) {
+          this.writeXmlUrl({ baseUrl, route, alternativeUrls });
+        }
 
-      sitemap.forEach((url: ISitemapSite): void => {
-        const alternateUrls = this.langs?.reduce(
-          (accum: string, alternateLang: string): string => {
-            const localizedAlternateUrl = this.isSubdomain
-              ? getLocalizedSubdomainUrl(this.baseUrl, alternateLang)
-              : `${this.baseUrl}/${alternateLang}`;
-
-            return (
-              accum +
-              `\n\t\t<xhtml:link rel="alternate" hreflang="${alternateLang}" href="${localizedAlternateUrl}${url.pagePath}" />`
-            );
-          },
-          '',
-        );
-
-        this.writeXmlUrl({
-          baseUrl: localizedBaseUrl,
-          url,
-          alternateUrls,
+        locales?.forEach((lang: string): void => {
+          this.writeXmlUrl({
+            baseUrl: `${baseUrl}/${lang}`,
+            route,
+            alternativeUrls,
+          });
         });
       });
     });
   };
 
-  private writeXmlUrl = ({ baseUrl, url, alternateUrls }: IWriteXmlUrl): void =>
+  private writeXmlUrl = ({
+    baseUrl,
+    route,
+    alternativeUrls,
+  }: IWriteXmlUrl): void =>
     fs.writeFileSync(
       path.resolve(this.targetDirectory, './sitemap.xml'),
-      getXmlUrl({ baseUrl, url, alternateUrls }),
+      getXmlUrl({
+        baseUrl,
+        route,
+        alternativeUrls,
+        trailingSlash: this.trailingSlash,
+      }),
       { flag: 'as' },
     );
 

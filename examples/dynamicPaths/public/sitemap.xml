@@ -6,28 +6,33 @@
     xmlns:xhtml="http://www.w3.org/1999/xhtml">
     <url>
         <loc>https://example.com/about/</loc>
-        <lastmod>2020-07-26</lastmod>
+        <lastmod>2021-08-30</lastmod>
+		<xhtml:link rel="alternate" hreflang="en" href="https://example.com/about/" />
     </url>
     <url>
         <loc>https://example.com/</loc>
-        <lastmod>2020-07-26</lastmod>
+        <lastmod>2021-08-30</lastmod>
+		<xhtml:link rel="alternate" hreflang="en" href="https://example.com/" />
     </url>
     <url>
         <loc>https://example.com/project/house/</loc>
-        <lastmod>2020-07-26</lastmod>
+        <lastmod>2021-08-30</lastmod>
         <changefreq>daily</changefreq>
         <priority>0.5</priority>
+		<xhtml:link rel="alternate" hreflang="en" href="https://example.com/project/house/" />
     </url>
     <url>
         <loc>https://example.com/project/flower/</loc>
-        <lastmod>2020-07-26</lastmod>
+        <lastmod>2021-08-30</lastmod>
         <changefreq>daily</changefreq>
         <priority>0.5</priority>
+		<xhtml:link rel="alternate" hreflang="en" href="https://example.com/project/flower/" />
     </url>
     <url>
         <loc>https://example.com/project/table/</loc>
-        <lastmod>2020-07-26</lastmod>
+        <lastmod>2021-08-30</lastmod>
         <changefreq>daily</changefreq>
         <priority>0.5</priority>
+		<xhtml:link rel="alternate" hreflang="en" href="https://example.com/project/table/" />
     </url>
 </urlset>

@@ -1,30 +1,31 @@
 import fs from 'fs';
 import path from 'path';
 import { format } from 'date-fns';
-import { IGetPathMap, IGetSitemap, IGetXmlUrl, ISitemapSite } from './types';
+import {
+  IGetAlternativePath,
+  IGetBaseUrl,
+  IGetPathMap,
+  IGetSitemap,
+  IGetXmlUrl,
+  ISitemapSite,
+} from './types';
 import {
   splitFoldersAndFiles,
   splitFilenameAndExtn,
-  appendTrailingSlash,
-  removeTrailingSlash,
   findMatch,
   isExcludedExtn,
   isReservedPage,
+  normalizeTrailingSlash,
 } from './utils';
-
-const getLocalizedSubdomainUrl = (baseUrl: string, lang: string): string => {
-  const protocolAndHostname = baseUrl.split('//');
-  protocolAndHostname[1] = `${lang}.${protocolAndHostname[1]}`;
-
-  return protocolAndHostname.join('//');
-};
 
 const getXmlUrl = ({
   baseUrl,
-  url,
-  alternateUrls = '',
+  route,
+  alternativeUrls = '',
+  trailingSlash,
 }: IGetXmlUrl): string => {
-  const { pagePath, priority, changefreq } = url;
+  const { pagePath, priority, changefreq } = route;
+  const loc = normalizeTrailingSlash(`${baseUrl}${pagePath}`, trailingSlash);
   const date = format(new Date(), 'yyyy-MM-dd');
 
   const xmlChangefreq = changefreq
@@ -38,45 +39,45 @@ const getXmlUrl = ({
 
   return `
     <url>
-        <loc>${baseUrl}${pagePath}</loc>
-        <lastmod>${date}</lastmod>${xmlChangefreq}${xmlPriority}${alternateUrls}
+        <loc>${loc}</loc>
+        <lastmod>${date}</lastmod>${xmlChangefreq}${xmlPriority}${alternativeUrls}
     </url>`;
 };
 
-const getPaths = ({
-  folderPath,
+const getPathsFromDirectory = ({
   rootPath,
+  directoryPath,
   excludeExtns,
   excludeIdx,
 }: IGetPathMap): string[] => {
-  const fileNames: string[] = fs.readdirSync(folderPath);
+  const fileNames: string[] = fs.readdirSync(directoryPath);
   let paths: string[] = [];
 
   for (const fileName of fileNames) {
     if (isReservedPage(fileName)) continue;
 
-    const nextPath = folderPath + path.sep + fileName;
+    const nextPath = directoryPath + path.sep + fileName;
     const isFolder = fs.lstatSync(nextPath).isDirectory();
 
     if (isFolder) {
-      const pathsInFolder = getPaths({
-        folderPath: nextPath,
+      const directoryPaths = getPathsFromDirectory({
         rootPath,
+        directoryPath: nextPath,
         excludeExtns,
         excludeIdx,
       });
-      paths = [...paths, ...pathsInFolder];
+      paths = [...paths, ...directoryPaths];
       continue;
     }
 
     const [fileNameWithoutExtn, fileExtn] = splitFilenameAndExtn(fileName);
     if (isExcludedExtn(fileExtn, excludeExtns)) continue;
 
-    const newFolderPath = folderPath
+    const newDirectoryPath = directoryPath
       .replace(rootPath, '')
       .replace(path.sep, '/');
 
-    const pagePath = `${newFolderPath}/${
+    const pagePath = `${newDirectoryPath}/${
       excludeIdx && fileNameWithoutExtn === 'index' ? '' : fileNameWithoutExtn
     }`;
     paths.push(pagePath);
@@ -93,7 +94,7 @@ const getPathsFromNextConfig = async (
     nextConfig = nextConfig([], {});
   }
 
-  if (nextConfig && nextConfig.exportPathMap) {
+  if (nextConfig?.exportPathMap) {
     const { exportPathMap } = nextConfig;
 
     const pathMap = await exportPathMap({}, {});
@@ -103,36 +104,44 @@ const getPathsFromNextConfig = async (
   return [];
 };
 
-const getSitemap = async ({
-  paths,
-  include,
-  pagesConfig,
-  isTrailingSlashRequired,
-}: IGetSitemap): Promise<ISitemapSite[]> => {
+const getSitemap = ({ paths, pagesConfig }: IGetSitemap): ISitemapSite[] => {
   const pagesConfigKeys: string[] = Object.keys(pagesConfig);
   const [foldersConfig, filesConfig] = splitFoldersAndFiles(pagesConfigKeys);
 
-  const newPaths = [...paths, ...include];
-  return newPaths.map(
+  return paths.map(
     (pagePath: string): ISitemapSite => {
-      const formattedPagePath = isTrailingSlashRequired
-        ? appendTrailingSlash(pagePath)
-        : removeTrailingSlash(pagePath);
-
       const matchingPath = findMatch(pagePath, foldersConfig, filesConfig);
       const pageConfig = matchingPath ? pagesConfig[matchingPath] : undefined;
       const priority = pageConfig?.priority ?? '';
       const changefreq = pageConfig?.changefreq ?? '';
 
-      return { pagePath: formattedPagePath, priority, changefreq };
+      return { pagePath, priority, changefreq };
     },
   );
 };
 
+const getBaseUrl = ({ domain, http }: IGetBaseUrl): string =>
+  `${http ? 'http' : 'https'}://${domain}`;
+
+const getAlternativePath = ({
+  baseUrl,
+  route,
+  hreflang,
+  lang = '',
+  trailingSlash,
+}: IGetAlternativePath): string => {
+  const normalizedBaseUrl = normalizeTrailingSlash(baseUrl, !!lang);
+  const href = `${normalizedBaseUrl}${lang}${route}`;
+  const normalizedHref = normalizeTrailingSlash(href, trailingSlash);
+
+  return `\n\t\t<xhtml:link rel="alternate" hreflang="${hreflang}" href="${normalizedHref}" />`;
+};
+
 export {
-  getLocalizedSubdomainUrl,
   getXmlUrl,
-  getPaths,
+  getPathsFromDirectory,
   getPathsFromNextConfig,
   getSitemap,
+  getBaseUrl,
+  getAlternativePath,
 };

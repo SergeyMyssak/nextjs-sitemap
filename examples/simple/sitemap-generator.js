@@ -1,7 +1,7 @@
 const { configureSitemap } = require('@sergeymyssak/nextjs-sitemap');
 
 const Sitemap = configureSitemap({
-  baseUrl: 'https://example.com',
+  domains: [{ domain: 'example.com', locales: ['en', 'es'], http: true }],
   exclude: ['/admin/*'],
   excludeIndex: true,
   pagesConfig: {
@@ -10,7 +10,7 @@ const Sitemap = configureSitemap({
       changefreq: 'daily',
     },
   },
-  isTrailingSlashRequired: true,
+  trailingSlash: true,
   targetDirectory: __dirname + '/public',
   pagesDirectory: __dirname + '/src/pages',
 });

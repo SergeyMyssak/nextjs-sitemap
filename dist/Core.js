@@ -28,24 +28,20 @@ class Core {
         this.generateSitemap = () => __awaiter(this, void 0, void 0, function* () {
             const paths = this.nextConfigPath
                 ? yield helpers_1.getPathsFromNextConfig(this.nextConfigPath)
-                : helpers_1.getPaths({
-                    folderPath: this.pagesDirectory,
+                : helpers_1.getPathsFromDirectory({
                     rootPath: this.pagesDirectory,
+                    directoryPath: this.pagesDirectory,
                     excludeExtns: this.excludeExtensions,
                     excludeIdx: this.excludeIndex,
                 });
             const [excludeFolders, excludeFiles] = utils_1.splitFoldersAndFiles(this.exclude);
             const filteredPaths = paths.filter((path) => !utils_1.findMatch(path, excludeFolders, excludeFiles));
-            const sitemap = yield helpers_1.getSitemap({
-                paths: filteredPaths,
-                include: this.include,
+            const sitemap = helpers_1.getSitemap({
+                paths: [...filteredPaths, ...this.include],
                 pagesConfig: this.pagesConfig,
-                isTrailingSlashRequired: this.isTrailingSlashRequired,
             });
             this.writeHeader();
-            this.writeSitemap({
-                sitemap,
-            });
+            this.writeSitemap({ sitemap });
             this.writeFooter();
         });
         this.writeHeader = () => __awaiter(this, void 0, void 0, function* () {
@@ -54,49 +50,55 @@ class Core {
             fs_1.default.writeFileSync(path_1.default.resolve(this.targetDirectory, './sitemap.xml'), this.xmlHeader + xmlStyles + this.xmlURLSet, { flag: 'w' });
         });
         this.writeSitemap = ({ sitemap }) => {
-            if (!this.langs) {
-                sitemap.forEach((url) => {
-                    this.writeXmlUrl({
-                        baseUrl: this.baseUrl,
-                        url,
+            this.domains.forEach(({ domain, defaultLocale, locales, http }) => {
+                const baseUrl = helpers_1.getBaseUrl({ domain, http });
+                sitemap.forEach((route) => {
+                    let alternativeUrls = defaultLocale
+                        ? helpers_1.getAlternativePath({
+                            baseUrl,
+                            route: route.pagePath,
+                            hreflang: defaultLocale,
+                            trailingSlash: this.trailingSlash,
+                        })
+                        : '';
+                    locales === null || locales === void 0 ? void 0 : locales.forEach((alternativeLang) => {
+                        alternativeUrls += helpers_1.getAlternativePath({
+                            baseUrl,
+                            route: route.pagePath,
+                            hreflang: alternativeLang,
+                            lang: alternativeLang,
+                            trailingSlash: this.trailingSlash,
+                        });
                     });
-                });
-                return;
-            }
-            this.langs.forEach((lang) => {
-                const localizedBaseUrl = this.isSubdomain
-                    ? helpers_1.getLocalizedSubdomainUrl(this.baseUrl, lang)
-                    : `${this.baseUrl}/${lang}`;
-                sitemap.forEach((url) => {
-                    var _a;
-                    const alternateUrls = (_a = this.langs) === null || _a === void 0 ? void 0 : _a.reduce((accum, alternateLang) => {
-                        const localizedAlternateUrl = this.isSubdomain
-                            ? helpers_1.getLocalizedSubdomainUrl(this.baseUrl, alternateLang)
-                            : `${this.baseUrl}/${alternateLang}`;
-                        return (accum +
-                            `\n\t\t<xhtml:link rel="alternate" hreflang="${alternateLang}" href="${localizedAlternateUrl}${url.pagePath}" />`);
-                    }, '');
-                    this.writeXmlUrl({
-                        baseUrl: localizedBaseUrl,
-                        url,
-                        alternateUrls,
+                    if (defaultLocale) {
+                        this.writeXmlUrl({ baseUrl, route, alternativeUrls });
+                    }
+                    locales === null || locales === void 0 ? void 0 : locales.forEach((lang) => {
+                        this.writeXmlUrl({
+                            baseUrl: `${baseUrl}/${lang}`,
+                            route,
+                            alternativeUrls,
+                        });
                     });
                 });
             });
         };
-        this.writeXmlUrl = ({ baseUrl, url, alternateUrls }) => fs_1.default.writeFileSync(path_1.default.resolve(this.targetDirectory, './sitemap.xml'), helpers_1.getXmlUrl({ baseUrl, url, alternateUrls }), { flag: 'as' });
+        this.writeXmlUrl = ({ baseUrl, route, alternativeUrls, }) => fs_1.default.writeFileSync(path_1.default.resolve(this.targetDirectory, './sitemap.xml'), helpers_1.getXmlUrl({
+            baseUrl,
+            route,
+            alternativeUrls,
+            trailingSlash: this.trailingSlash,
+        }), { flag: 'as' });
         this.writeFooter = () => fs_1.default.writeFileSync(path_1.default.resolve(this.targetDirectory, './sitemap.xml'), '\n</urlset>', { flag: 'as' });
         if (!config)
             throw new Error('Config is mandatory');
-        const { baseUrl, exclude = [], excludeExtensions = [], excludeIndex = true, include = [], isSubdomain = false, isTrailingSlashRequired = false, langs, nextConfigPath, pagesConfig = {}, pagesDirectory, sitemapStylesheet = [], targetDirectory, } = config;
-        this.baseUrl = baseUrl;
+        const { domains = [], exclude = [], excludeExtensions = [], excludeIndex = true, include = [], trailingSlash = false, nextConfigPath, pagesConfig = {}, pagesDirectory, sitemapStylesheet = [], targetDirectory, } = config;
+        this.domains = domains;
         this.include = include;
         this.excludeExtensions = excludeExtensions;
         this.exclude = exclude;
         this.excludeIndex = excludeIndex;
-        this.isSubdomain = isSubdomain;
-        this.isTrailingSlashRequired = isTrailingSlashRequired;
-        this.langs = langs;
+        this.trailingSlash = trailingSlash;
         this.nextConfigPath = nextConfigPath;
         this.pagesConfig = pagesConfig;
         this.pagesDirectory = pagesDirectory;
