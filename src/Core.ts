@@ -3,8 +3,8 @@ import path from 'path';
 import {
   getAlternativePath,
   getBaseUrl,
+  getNextConfig,
   getPathsFromDirectory,
-  getPathsFromNextConfig,
   getSitemap,
   getXmlUrl,
 } from './helpers';
@@ -71,14 +71,23 @@ class Core implements ICoreInterface {
   }
 
   public generateSitemap = async (): Promise<void> => {
-    const paths: string[] = this.nextConfigPath
-      ? await getPathsFromNextConfig(this.nextConfigPath)
-      : getPathsFromDirectory({
-          rootPath: this.pagesDirectory,
-          directoryPath: this.pagesDirectory,
-          excludeExtns: this.excludeExtensions,
-          excludeIdx: this.excludeIndex,
-        });
+    let paths: string[];
+    let nextDomains: IDomain[] | undefined;
+    let nextTrailingSlash: boolean | undefined;
+
+    if (this.nextConfigPath) {
+      const nextConfig = await getNextConfig(this.nextConfigPath);
+      paths = nextConfig.paths;
+      nextDomains = nextConfig.domains;
+      nextTrailingSlash = nextConfig.trailingSlash;
+    } else {
+      paths = getPathsFromDirectory({
+        rootPath: this.pagesDirectory,
+        directoryPath: this.pagesDirectory,
+        excludeExtns: this.excludeExtensions,
+        excludeIdx: this.excludeIndex,
+      });
+    }
 
     const [excludeFolders, excludeFiles] = splitFoldersAndFiles(this.exclude);
     const filteredPaths: string[] = paths.filter(
@@ -91,7 +100,7 @@ class Core implements ICoreInterface {
     });
 
     this.writeHeader();
-    this.writeSitemap({ sitemap });
+    this.writeSitemap({ sitemap, nextDomains, nextTrailingSlash });
     this.writeFooter();
   };
 
@@ -110,8 +119,15 @@ class Core implements ICoreInterface {
     );
   };
 
-  private writeSitemap = ({ sitemap }: IWriteSitemap): void => {
-    this.domains.forEach(({ domain, defaultLocale, locales, http }): void => {
+  private writeSitemap = ({
+    sitemap,
+    nextDomains,
+    nextTrailingSlash,
+  }: IWriteSitemap): void => {
+    const domains = nextDomains || this.domains;
+    const trailingSlash = nextTrailingSlash || this.trailingSlash;
+
+    domains.forEach(({ domain, defaultLocale, locales, http }): void => {
       const baseUrl = getBaseUrl({ domain, http });
 
       sitemap.forEach((route: ISitemapSite): void => {
@@ -120,7 +136,7 @@ class Core implements ICoreInterface {
               baseUrl,
               route: route.pagePath,
               hreflang: defaultLocale,
-              trailingSlash: this.trailingSlash,
+              trailingSlash,
             })
           : '';
 
@@ -130,12 +146,17 @@ class Core implements ICoreInterface {
             route: route.pagePath,
             hreflang: alternativeLang,
             lang: alternativeLang,
-            trailingSlash: this.trailingSlash,
+            trailingSlash,
           });
         });
 
         if (defaultLocale) {
-          this.writeXmlUrl({ baseUrl, route, alternativeUrls });
+          this.writeXmlUrl({
+            baseUrl,
+            route,
+            alternativeUrls,
+            trailingSlash,
+          });
         }
 
         locales?.forEach((lang: string): void => {
@@ -143,6 +164,7 @@ class Core implements ICoreInterface {
             baseUrl: `${baseUrl}/${lang}`,
             route,
             alternativeUrls,
+            trailingSlash,
           });
         });
       });
@@ -153,6 +175,7 @@ class Core implements ICoreInterface {
     baseUrl,
     route,
     alternativeUrls,
+    trailingSlash,
   }: IWriteXmlUrl): void =>
     fs.writeFileSync(
       path.resolve(this.targetDirectory, './sitemap.xml'),
@@ -160,7 +183,7 @@ class Core implements ICoreInterface {
         baseUrl,
         route,
         alternativeUrls,
-        trailingSlash: this.trailingSlash,
+        trailingSlash,
       }),
       { flag: 'as' },
     );

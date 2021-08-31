@@ -7,7 +7,7 @@ export interface ICoreInterface {
 }
 
 interface IConfig {
-  domains: IDomain[];
+  domains?: IDomain[];
   exclude?: string[];
   excludeExtensions?: string[];
   excludeIndex?: boolean;
@@ -45,10 +45,9 @@ export interface ISitemapSite {
   changefreq: string;
 }
 
-export interface IGetXmlUrl {
-  baseUrl: string;
-  route: ISitemapSite;
-  alternativeUrls?: string;
+export interface INextConfig {
+  paths: string[];
+  domains?: IDomain[];
   trailingSlash: boolean;
 }
 
@@ -79,12 +78,22 @@ export interface IGetAlternativePath {
 
 export interface IWriteSitemap {
   sitemap: ISitemapSite[];
+  nextDomains?: IDomain[];
+  nextTrailingSlash?: boolean;
+}
+
+export interface IGetXmlUrl {
+  baseUrl: string;
+  route: ISitemapSite;
+  alternativeUrls?: string;
+  trailingSlash: boolean;
 }
 
 export interface IWriteXmlUrl {
   baseUrl: string;
   route: ISitemapSite;
   alternativeUrls?: string;
+  trailingSlash: boolean;
 }
 
 export default IConfig;

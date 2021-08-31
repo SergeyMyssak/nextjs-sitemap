@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getAlternativePath = exports.getBaseUrl = exports.getSitemap = exports.getPathsFromNextConfig = exports.getPathsFromDirectory = exports.getXmlUrl = void 0;
+exports.getAlternativePath = exports.getBaseUrl = exports.getSitemap = exports.getPathsFromDirectory = exports.getNextConfig = exports.getXmlUrl = void 0;
 const fs_1 = __importDefault(require("fs"));
 const path_1 = __importDefault(require("path"));
 const date_fns_1 = require("date-fns");
@@ -66,19 +66,24 @@ const getPathsFromDirectory = ({ rootPath, directoryPath, excludeExtns, excludeI
     return paths;
 };
 exports.getPathsFromDirectory = getPathsFromDirectory;
-const getPathsFromNextConfig = (nextConfigPath) => __awaiter(void 0, void 0, void 0, function* () {
+const getNextConfig = (nextConfigPath) => __awaiter(void 0, void 0, void 0, function* () {
+    var _a;
     let nextConfig = require(nextConfigPath);
     if (typeof nextConfig === 'function') {
         nextConfig = nextConfig([], {});
     }
-    if (nextConfig === null || nextConfig === void 0 ? void 0 : nextConfig.exportPathMap) {
-        const { exportPathMap } = nextConfig;
-        const pathMap = yield exportPathMap({}, {});
-        return Object.keys(pathMap);
+    const res = {
+        paths: [],
+        domains: (_a = nextConfig.i18n) === null || _a === void 0 ? void 0 : _a.domains,
+        trailingSlash: nextConfig.trailingSlash,
+    };
+    if (nextConfig.exportPathMap) {
+        const pathMap = yield nextConfig.exportPathMap({}, {});
+        res.paths = Object.keys(pathMap);
     }
-    return [];
+    return res;
 });
-exports.getPathsFromNextConfig = getPathsFromNextConfig;
+exports.getNextConfig = getNextConfig;
 const getSitemap = ({ paths, pagesConfig }) => {
     const pagesConfigKeys = Object.keys(pagesConfig);
     const [foldersConfig, filesConfig] = utils_1.splitFoldersAndFiles(pagesConfigKeys);

@@ -7,6 +7,7 @@ import {
   IGetPathMap,
   IGetSitemap,
   IGetXmlUrl,
+  INextConfig,
   ISitemapSite,
 } from './types';
 import {
@@ -86,22 +87,24 @@ const getPathsFromDirectory = ({
   return paths;
 };
 
-const getPathsFromNextConfig = async (
-  nextConfigPath: string,
-): Promise<string[]> => {
+const getNextConfig = async (nextConfigPath: string): Promise<INextConfig> => {
   let nextConfig = require(nextConfigPath);
   if (typeof nextConfig === 'function') {
     nextConfig = nextConfig([], {});
   }
 
-  if (nextConfig?.exportPathMap) {
-    const { exportPathMap } = nextConfig;
+  const res: INextConfig = {
+    paths: [],
+    domains: nextConfig.i18n?.domains,
+    trailingSlash: nextConfig.trailingSlash,
+  };
 
-    const pathMap = await exportPathMap({}, {});
-    return Object.keys(pathMap);
+  if (nextConfig.exportPathMap) {
+    const pathMap = await nextConfig.exportPathMap({}, {});
+    res.paths = Object.keys(pathMap);
   }
 
-  return [];
+  return res;
 };
 
 const getSitemap = ({ paths, pagesConfig }: IGetSitemap): ISitemapSite[] => {
@@ -139,8 +142,8 @@ const getAlternativePath = ({
 
 export {
   getXmlUrl,
+  getNextConfig,
   getPathsFromDirectory,
-  getPathsFromNextConfig,
   getSitemap,
   getBaseUrl,
   getAlternativePath,

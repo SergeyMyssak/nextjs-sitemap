@@ -26,14 +26,23 @@ class Core {
     xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
     xmlns:xhtml="http://www.w3.org/1999/xhtml">`;
         this.generateSitemap = () => __awaiter(this, void 0, void 0, function* () {
-            const paths = this.nextConfigPath
-                ? yield helpers_1.getPathsFromNextConfig(this.nextConfigPath)
-                : helpers_1.getPathsFromDirectory({
+            let paths;
+            let nextDomains;
+            let nextTrailingSlash;
+            if (this.nextConfigPath) {
+                const nextConfig = yield helpers_1.getNextConfig(this.nextConfigPath);
+                paths = nextConfig.paths;
+                nextDomains = nextConfig.domains;
+                nextTrailingSlash = nextConfig.trailingSlash;
+            }
+            else {
+                paths = helpers_1.getPathsFromDirectory({
                     rootPath: this.pagesDirectory,
                     directoryPath: this.pagesDirectory,
                     excludeExtns: this.excludeExtensions,
                     excludeIdx: this.excludeIndex,
                 });
+            }
             const [excludeFolders, excludeFiles] = utils_1.splitFoldersAndFiles(this.exclude);
             const filteredPaths = paths.filter((path) => !utils_1.findMatch(path, excludeFolders, excludeFiles));
             const sitemap = helpers_1.getSitemap({
@@ -41,7 +50,7 @@ class Core {
                 pagesConfig: this.pagesConfig,
             });
             this.writeHeader();
-            this.writeSitemap({ sitemap });
+            this.writeSitemap({ sitemap, nextDomains, nextTrailingSlash });
             this.writeFooter();
         });
         this.writeHeader = () => __awaiter(this, void 0, void 0, function* () {
@@ -49,8 +58,10 @@ class Core {
             const xmlStyles = (_b = (_a = this.sitemapStylesheet) === null || _a === void 0 ? void 0 : _a.reduce((accum, { type, styleFile }) => accum + `<?xml-stylesheet href="${styleFile}" type="${type}" ?>\n`, '')) !== null && _b !== void 0 ? _b : '';
             fs_1.default.writeFileSync(path_1.default.resolve(this.targetDirectory, './sitemap.xml'), this.xmlHeader + xmlStyles + this.xmlURLSet, { flag: 'w' });
         });
-        this.writeSitemap = ({ sitemap }) => {
-            this.domains.forEach(({ domain, defaultLocale, locales, http }) => {
+        this.writeSitemap = ({ sitemap, nextDomains, nextTrailingSlash, }) => {
+            const domains = nextDomains || this.domains;
+            const trailingSlash = nextTrailingSlash || this.trailingSlash;
+            domains.forEach(({ domain, defaultLocale, locales, http }) => {
                 const baseUrl = helpers_1.getBaseUrl({ domain, http });
                 sitemap.forEach((route) => {
                     let alternativeUrls = defaultLocale
@@ -58,7 +69,7 @@ class Core {
                             baseUrl,
                             route: route.pagePath,
                             hreflang: defaultLocale,
-                            trailingSlash: this.trailingSlash,
+                            trailingSlash,
                         })
                         : '';
                     locales === null || locales === void 0 ? void 0 : locales.forEach((alternativeLang) => {
@@ -67,27 +78,33 @@ class Core {
                             route: route.pagePath,
                             hreflang: alternativeLang,
                             lang: alternativeLang,
-                            trailingSlash: this.trailingSlash,
+                            trailingSlash,
                         });
                     });
                     if (defaultLocale) {
-                        this.writeXmlUrl({ baseUrl, route, alternativeUrls });
+                        this.writeXmlUrl({
+                            baseUrl,
+                            route,
+                            alternativeUrls,
+                            trailingSlash,
+                        });
                     }
                     locales === null || locales === void 0 ? void 0 : locales.forEach((lang) => {
                         this.writeXmlUrl({
                             baseUrl: `${baseUrl}/${lang}`,
                             route,
                             alternativeUrls,
+                            trailingSlash,
                         });
                     });
                 });
             });
         };
-        this.writeXmlUrl = ({ baseUrl, route, alternativeUrls, }) => fs_1.default.writeFileSync(path_1.default.resolve(this.targetDirectory, './sitemap.xml'), helpers_1.getXmlUrl({
+        this.writeXmlUrl = ({ baseUrl, route, alternativeUrls, trailingSlash, }) => fs_1.default.writeFileSync(path_1.default.resolve(this.targetDirectory, './sitemap.xml'), helpers_1.getXmlUrl({
             baseUrl,
             route,
             alternativeUrls,
-            trailingSlash: this.trailingSlash,
+            trailingSlash,
         }), { flag: 'as' });
         this.writeFooter = () => fs_1.default.writeFileSync(path_1.default.resolve(this.targetDirectory, './sitemap.xml'), '\n</urlset>', { flag: 'as' });
         if (!config)

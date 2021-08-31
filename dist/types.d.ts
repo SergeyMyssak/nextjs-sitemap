@@ -5,7 +5,7 @@ export interface ICoreInterface {
     generateSitemap: () => Promise<void>;
 }
 interface IConfig {
-    domains: IDomain[];
+    domains?: IDomain[];
     exclude?: string[];
     excludeExtensions?: string[];
     excludeIndex?: boolean;
@@ -16,6 +16,12 @@ interface IConfig {
     pagesDirectory: string;
     sitemapStylesheet?: ISitemapStylesheet[];
     targetDirectory: string;
+}
+export interface IDomain {
+    domain: string;
+    defaultLocale?: string;
+    locales?: string[];
+    http?: boolean;
 }
 export interface IPagesConfig {
     [key: string]: {
@@ -32,10 +38,9 @@ export interface ISitemapSite {
     priority: string;
     changefreq: string;
 }
-export interface IGetXmlUrl {
-    baseUrl: string;
-    route: ISitemapSite;
-    alternativeUrls?: string;
+export interface INextConfig {
+    paths: string[];
+    domains?: IDomain[];
     trailingSlash: boolean;
 }
 export interface IGetPathMap {
@@ -61,16 +66,19 @@ export interface IGetAlternativePath {
 }
 export interface IWriteSitemap {
     sitemap: ISitemapSite[];
+    nextDomains?: IDomain[];
+    nextTrailingSlash?: boolean;
+}
+export interface IGetXmlUrl {
+    baseUrl: string;
+    route: ISitemapSite;
+    alternativeUrls?: string;
+    trailingSlash: boolean;
 }
 export interface IWriteXmlUrl {
     baseUrl: string;
     route: ISitemapSite;
     alternativeUrls?: string;
-}
-export interface IDomain {
-    domain: string;
-    defaultLocale?: string;
-    locales?: string[];
-    http?: boolean;
+    trailingSlash: boolean;
 }
 export default IConfig;
