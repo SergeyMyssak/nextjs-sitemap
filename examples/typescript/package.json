@@ -11,7 +11,7 @@
   },
   "dependencies": {
     "@babel/cli": "^7.10.4",
-    "@sergeymyssak/nextjs-sitemap": "2.0.0",
+    "@sergeymyssak/nextjs-sitemap": "2.0.3",
     "@types/node": "^14.0.26",
     "next": "9.4.4",
     "react": "16.13.1",
