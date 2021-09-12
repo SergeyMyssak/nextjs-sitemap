@@ -1,4 +1,4 @@
-## Localized Subdomain
+## Multiple Sitemaps
 
 Open a Terminal in the project root and run:
 

@@ -1,10 +1,13 @@
-export interface ICoreConstructor {
-    new (config: IConfig): ICoreInterface;
+import { IDomain, IPagesConfig, ISitemapStylesheet } from './ConfigExtractor/types';
+import { ISitemapWriterResultItem } from './SitemapWriter/types';
+export interface ISitemapGeneratorConstructor {
+    new (config: ISitemapGenerator): ISitemapGeneratorInterface;
 }
-export interface ICoreInterface {
-    generateSitemap: () => Promise<void>;
+export interface ISitemapGeneratorInterface {
+    generateSitemap: () => Promise<ISitemapWriterResultItem[]>;
+    regenerateSitemapIndex: (sitemapsNames: string[]) => void;
 }
-interface IConfig {
+interface ISitemapGenerator {
     domains?: IDomain[];
     exclude?: string[];
     excludeExtensions?: string[];
@@ -14,71 +17,9 @@ interface IConfig {
     nextConfigPath?: string;
     pagesConfig?: IPagesConfig;
     pagesDirectory: string;
-    sitemapStylesheet?: ISitemapStylesheet[];
     targetDirectory: string;
+    sitemapUrl?: string;
+    sitemapSize?: number;
+    sitemapStylesheet?: ISitemapStylesheet[];
 }
-export interface IDomain {
-    domain: string;
-    defaultLocale?: string;
-    locales?: string[];
-    http?: boolean;
-}
-export interface IPagesConfig {
-    [key: string]: {
-        priority: string;
-        changefreq: string;
-    };
-}
-export interface ISitemapStylesheet {
-    type: string;
-    styleFile: string;
-}
-export interface ISitemapSite {
-    pagePath: string;
-    priority: string;
-    changefreq: string;
-}
-export interface INextConfig {
-    paths: string[];
-    domains?: IDomain[];
-    trailingSlash: boolean;
-}
-export interface IGetPathMap {
-    rootPath: string;
-    directoryPath: string;
-    excludeExtns: string[];
-    excludeIdx?: boolean;
-}
-export interface IGetSitemap {
-    paths: string[];
-    pagesConfig: IPagesConfig;
-}
-export interface IGetBaseUrl {
-    domain: string;
-    http?: boolean;
-}
-export interface IGetAlternativePath {
-    baseUrl: string;
-    route: string;
-    hreflang: string;
-    lang?: string;
-    trailingSlash: boolean;
-}
-export interface IWriteSitemap {
-    sitemap: ISitemapSite[];
-    nextDomains?: IDomain[];
-    nextTrailingSlash?: boolean;
-}
-export interface IGetXmlUrl {
-    baseUrl: string;
-    route: ISitemapSite;
-    alternativeUrls?: string;
-    trailingSlash: boolean;
-}
-export interface IWriteXmlUrl {
-    baseUrl: string;
-    route: ISitemapSite;
-    alternativeUrls?: string;
-    trailingSlash: boolean;
-}
-export default IConfig;
+export default ISitemapGenerator;

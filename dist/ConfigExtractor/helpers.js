@@ -12,30 +12,28 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getAlternativePath = exports.getBaseUrl = exports.getSitemap = exports.getPathsFromDirectory = exports.getNextConfig = exports.getXmlUrl = void 0;
+exports.getSitemapUrls = exports.getPathsFromDirectory = exports.getNextConfig = void 0;
 const fs_1 = __importDefault(require("fs"));
 const path_1 = __importDefault(require("path"));
-const date_fns_1 = require("date-fns");
 const utils_1 = require("./utils");
-const getXmlUrl = ({ baseUrl, route, alternativeUrls = '', trailingSlash, }) => {
-    const { pagePath, priority, changefreq } = route;
-    const loc = utils_1.normalizeTrailingSlash(`${baseUrl}${pagePath}`, trailingSlash);
-    const date = date_fns_1.format(new Date(), 'yyyy-MM-dd');
-    const xmlChangefreq = changefreq
-        ? `
-        <changefreq>${changefreq}</changefreq>`
-        : '';
-    const xmlPriority = priority
-        ? `
-        <priority>${priority}</priority>`
-        : '';
-    return `
-    <url>
-        <loc>${loc}</loc>
-        <lastmod>${date}</lastmod>${xmlChangefreq}${xmlPriority}${alternativeUrls}
-    </url>`;
-};
-exports.getXmlUrl = getXmlUrl;
+const getNextConfig = (nextConfigPath) => __awaiter(void 0, void 0, void 0, function* () {
+    var _a;
+    let nextConfig = require(nextConfigPath);
+    if (typeof nextConfig === 'function') {
+        nextConfig = nextConfig([], {});
+    }
+    const res = {
+        paths: [],
+        domains: (_a = nextConfig.i18n) === null || _a === void 0 ? void 0 : _a.domains,
+        trailingSlash: nextConfig.trailingSlash,
+    };
+    if (nextConfig.exportPathMap) {
+        const pathMap = yield nextConfig.exportPathMap({}, {});
+        res.paths = Object.keys(pathMap);
+    }
+    return res;
+});
+exports.getNextConfig = getNextConfig;
 const getPathsFromDirectory = ({ rootPath, directoryPath, excludeExtns, excludeIdx, }) => {
     const fileNames = fs_1.default.readdirSync(directoryPath);
     let paths = [];
@@ -66,25 +64,7 @@ const getPathsFromDirectory = ({ rootPath, directoryPath, excludeExtns, excludeI
     return paths;
 };
 exports.getPathsFromDirectory = getPathsFromDirectory;
-const getNextConfig = (nextConfigPath) => __awaiter(void 0, void 0, void 0, function* () {
-    var _a;
-    let nextConfig = require(nextConfigPath);
-    if (typeof nextConfig === 'function') {
-        nextConfig = nextConfig([], {});
-    }
-    const res = {
-        paths: [],
-        domains: (_a = nextConfig.i18n) === null || _a === void 0 ? void 0 : _a.domains,
-        trailingSlash: nextConfig.trailingSlash,
-    };
-    if (nextConfig.exportPathMap) {
-        const pathMap = yield nextConfig.exportPathMap({}, {});
-        res.paths = Object.keys(pathMap);
-    }
-    return res;
-});
-exports.getNextConfig = getNextConfig;
-const getSitemap = ({ paths, pagesConfig }) => {
+const getSitemapUrls = ({ paths, pagesConfig, }) => {
     const pagesConfigKeys = Object.keys(pagesConfig);
     const [foldersConfig, filesConfig] = utils_1.splitFoldersAndFiles(pagesConfigKeys);
     return paths.map((pagePath) => {
@@ -96,13 +76,4 @@ const getSitemap = ({ paths, pagesConfig }) => {
         return { pagePath, priority, changefreq };
     });
 };
-exports.getSitemap = getSitemap;
-const getBaseUrl = ({ domain, http }) => `${http ? 'http' : 'https'}://${domain}`;
-exports.getBaseUrl = getBaseUrl;
-const getAlternativePath = ({ baseUrl, route, hreflang, lang = '', trailingSlash, }) => {
-    const normalizedBaseUrl = utils_1.normalizeTrailingSlash(baseUrl, !!lang);
-    const href = `${normalizedBaseUrl}${lang}${route}`;
-    const normalizedHref = utils_1.normalizeTrailingSlash(href, trailingSlash);
-    return `\n\t\t<xhtml:link rel="alternate" hreflang="${hreflang}" href="${normalizedHref}" />`;
-};
-exports.getAlternativePath = getAlternativePath;
+exports.getSitemapUrls = getSitemapUrls;

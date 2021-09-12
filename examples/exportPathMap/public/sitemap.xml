@@ -1,33 +1,32 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<urlset xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 
-    http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd" 
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<urlset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd" 
     xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
     xmlns:xhtml="http://www.w3.org/1999/xhtml">
     <url>
         <loc>https://example.com/</loc>
-        <lastmod>2021-08-31</lastmod>
+        <lastmod>2021-09-10</lastmod>
 		<xhtml:link rel="alternate" hreflang="en" href="https://example.com/" />
 		<xhtml:link rel="alternate" hreflang="en-US" href="https://example.com/en-US/" />
 		<xhtml:link rel="alternate" hreflang="en-CA" href="https://example.com/en-CA/" />
     </url>
     <url>
         <loc>https://example.com/en-US/</loc>
-        <lastmod>2021-08-31</lastmod>
+        <lastmod>2021-09-10</lastmod>
 		<xhtml:link rel="alternate" hreflang="en" href="https://example.com/" />
 		<xhtml:link rel="alternate" hreflang="en-US" href="https://example.com/en-US/" />
 		<xhtml:link rel="alternate" hreflang="en-CA" href="https://example.com/en-CA/" />
     </url>
     <url>
         <loc>https://example.com/en-CA/</loc>
-        <lastmod>2021-08-31</lastmod>
+        <lastmod>2021-09-10</lastmod>
 		<xhtml:link rel="alternate" hreflang="en" href="https://example.com/" />
 		<xhtml:link rel="alternate" hreflang="en-US" href="https://example.com/en-US/" />
 		<xhtml:link rel="alternate" hreflang="en-CA" href="https://example.com/en-CA/" />
     </url>
     <url>
         <loc>https://example.com/p/learn-nextjs/</loc>
-        <lastmod>2021-08-31</lastmod>
+        <lastmod>2021-09-10</lastmod>
         <changefreq>daily</changefreq>
         <priority>0.5</priority>
 		<xhtml:link rel="alternate" hreflang="en" href="https://example.com/p/learn-nextjs/" />
@@ -36,7 +35,7 @@
     </url>
     <url>
         <loc>https://example.com/en-US/p/learn-nextjs/</loc>
-        <lastmod>2021-08-31</lastmod>
+        <lastmod>2021-09-10</lastmod>
         <changefreq>daily</changefreq>
         <priority>0.5</priority>
 		<xhtml:link rel="alternate" hreflang="en" href="https://example.com/p/learn-nextjs/" />
@@ -45,7 +44,7 @@
     </url>
     <url>
         <loc>https://example.com/en-CA/p/learn-nextjs/</loc>
-        <lastmod>2021-08-31</lastmod>
+        <lastmod>2021-09-10</lastmod>
         <changefreq>daily</changefreq>
         <priority>0.5</priority>
 		<xhtml:link rel="alternate" hreflang="en" href="https://example.com/p/learn-nextjs/" />
@@ -54,12 +53,12 @@
     </url>
     <url>
         <loc>https://example.es/</loc>
-        <lastmod>2021-08-31</lastmod>
+        <lastmod>2021-09-10</lastmod>
 		<xhtml:link rel="alternate" hreflang="es" href="https://example.es/" />
     </url>
     <url>
         <loc>https://example.es/p/learn-nextjs/</loc>
-        <lastmod>2021-08-31</lastmod>
+        <lastmod>2021-09-10</lastmod>
         <changefreq>daily</changefreq>
         <priority>0.5</priority>
 		<xhtml:link rel="alternate" hreflang="es" href="https://example.es/p/learn-nextjs/" />

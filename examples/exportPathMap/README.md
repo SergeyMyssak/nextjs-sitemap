@@ -1,4 +1,4 @@
-## Export path map
+## Export Path Map
 
 Open a Terminal in the project root and run:
 

@@ -1,42 +1,41 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<urlset xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 
-    http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd" 
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<urlset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd" 
     xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
     xmlns:xhtml="http://www.w3.org/1999/xhtml">
     <url>
         <loc>https://example.com/en/about/</loc>
-        <lastmod>2021-08-30</lastmod>
+        <lastmod>2021-09-10</lastmod>
 		<xhtml:link rel="alternate" hreflang="en" href="https://example.com/en/about/" />
 		<xhtml:link rel="alternate" hreflang="es" href="https://example.com/es/about/" />
     </url>
     <url>
         <loc>https://example.com/es/about/</loc>
-        <lastmod>2021-08-30</lastmod>
+        <lastmod>2021-09-10</lastmod>
 		<xhtml:link rel="alternate" hreflang="en" href="https://example.com/en/about/" />
 		<xhtml:link rel="alternate" hreflang="es" href="https://example.com/es/about/" />
     </url>
     <url>
         <loc>https://example.com/en/</loc>
-        <lastmod>2021-08-30</lastmod>
+        <lastmod>2021-09-10</lastmod>
 		<xhtml:link rel="alternate" hreflang="en" href="https://example.com/en/" />
 		<xhtml:link rel="alternate" hreflang="es" href="https://example.com/es/" />
     </url>
     <url>
         <loc>https://example.com/es/</loc>
-        <lastmod>2021-08-30</lastmod>
+        <lastmod>2021-09-10</lastmod>
 		<xhtml:link rel="alternate" hreflang="en" href="https://example.com/en/" />
 		<xhtml:link rel="alternate" hreflang="es" href="https://example.com/es/" />
     </url>
     <url>
         <loc>https://example.com/en/works/</loc>
-        <lastmod>2021-08-30</lastmod>
+        <lastmod>2021-09-10</lastmod>
 		<xhtml:link rel="alternate" hreflang="en" href="https://example.com/en/works/" />
 		<xhtml:link rel="alternate" hreflang="es" href="https://example.com/es/works/" />
     </url>
     <url>
         <loc>https://example.com/es/works/</loc>
-        <lastmod>2021-08-30</lastmod>
+        <lastmod>2021-09-10</lastmod>
 		<xhtml:link rel="alternate" hreflang="en" href="https://example.com/en/works/" />
 		<xhtml:link rel="alternate" hreflang="es" href="https://example.com/es/works/" />
     </url>

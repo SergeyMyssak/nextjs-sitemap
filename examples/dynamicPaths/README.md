@@ -1,4 +1,4 @@
-## Dynamic paths
+## Dynamic Paths
 
 Open a Terminal in the project root and run:
 
