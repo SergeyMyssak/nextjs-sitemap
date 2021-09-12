@@ -6,7 +6,6 @@ module.exports = {
         defaultLocale: 'en',
         locales: ['en-US', 'en-CA'],
       },
-      { domain: 'example.es', defaultLocale: 'es' },
     ],
   },
   trailingSlash: true,

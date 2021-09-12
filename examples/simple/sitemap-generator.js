@@ -1,7 +1,7 @@
 const { configureSitemap } = require('@sergeymyssak/nextjs-sitemap');
 
 const Sitemap = configureSitemap({
-  domains: [{ domain: 'example.com', locales: ['en', 'es'], http: true }],
+  domains: [{ domain: 'example.com', defaultLocale: 'en', http: true }],
   exclude: ['/admin/*'],
   excludeIndex: true,
   pagesConfig: {
@@ -14,4 +14,5 @@ const Sitemap = configureSitemap({
   targetDirectory: __dirname + '/public',
   pagesDirectory: __dirname + '/src/pages',
 });
+
 Sitemap.generateSitemap();

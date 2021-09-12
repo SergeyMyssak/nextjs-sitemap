@@ -26,5 +26,6 @@ getDynamicPaths().then((paths) => {
     targetDirectory: __dirname + '/public',
     pagesDirectory: __dirname + '/src/pages',
   });
+
   Sitemap.generateSitemap();
 });

@@ -13,4 +13,5 @@ const Sitemap = configureSitemap({
   targetDirectory: __dirname + '/public',
   pagesDirectory: __dirname + '/src/pages',
 });
+
 Sitemap.generateSitemap();
