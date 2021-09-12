@@ -395,6 +395,9 @@ Sitemap.generateSitemap();
 </urlset>
 ```
 
+</p>
+</details> 
+
 #### Multiple sitemaps
 
 If the number of urls is more than 50000, then several sitemaps will be automatically created. You can customize the number of urls using `sitemapSize`
