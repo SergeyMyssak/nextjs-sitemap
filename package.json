@@ -1,9 +1,9 @@
 {
   "name": "@sergeymyssak/nextjs-sitemap",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "Generate dynamic sitemap.xml for Next.js project!",
-  "main": "dist/Core.js",
-  "types": "dist/Core.d.ts",
+  "main": "dist/SitemapGenerator.js",
+  "types": "dist/SitemapGenerator.d.ts",
   "scripts": {
     "lint": "eslint '*src/**/*.{js,ts}' --quiet --fix",
     "start": "tsc && yarn lint"
