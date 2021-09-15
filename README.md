@@ -23,6 +23,9 @@ Checkout the [examples](https://github.com/SergeyMyssak/nextjs-sitemap/tree/mast
 - [Sitemap methods](#sitemap-methods)
 - [Sitemap options](#sitemap-options)
 - [Useful information](#useful-information)
+    - [Language localisation](#language-localisation)
+    - [Gzip](#gzip)
+
 
 ## Installation
 
@@ -591,58 +594,61 @@ Sitemap.generateSitemap();
 
 ## Useful information
 
-- The value of the hreflang attribute identifies the language (in [ISO 639-1](https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes) format) and optionally a region (in [ISO 3166-1 Alpha 2](https://en.wikipedia.org/wiki/ISO_3166-1)  format) of an alternate URL. 
-- You can gzip your sitemap.xml. The .gz extension just means that it's been compressed (using gzip compression), so that it's smaller and served faster. Most search engine bots can read gzip'd compressed content.
+#### Language localisation
+The value of the hreflang attribute identifies the language (in [ISO 639-1](https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes) format) and optionally a region (in [ISO 3166-1 Alpha 2](https://en.wikipedia.org/wiki/ISO_3166-1)  format) of an alternate URL. 
+
+#### Gzip
+You can gzip your `sitemap.xml`. The .gz extension just means that it's been compressed (using gzip compression), so that it's smaller and served faster. Most search engine bots can read gzip'd compressed content.
     
-    <details><summary>Look at code how you can generate sitemap.xml.gz</summary>
-    <p>
+<details><summary>Look at code how you can generate <code>sitemap.xml.gz</code></summary>
+<p>
     
-    ```js
-    // import zlib from 'zlib';
-    // import fs from 'fs';
-    // import { configureSitemap } from '@sergeymyssak/nextjs-sitemap';
+```js
+// import zlib from 'zlib';
+// import fs from 'fs';
+// import { configureSitemap } from '@sergeymyssak/nextjs-sitemap';
 
-    const zlib = require('zlib');
-    const fs = require('fs');
-    const { configureSitemap } = require('@sergeymyssak/nextjs-sitemap');
+const zlib = require('zlib');
+const fs = require('fs');
+const { configureSitemap } = require('@sergeymyssak/nextjs-sitemap');
 
-    async function getDynamicPaths() {
-      const data = ['house', 'flower', 'table'];
-      return data.map((item) => `/project/${item}`);
-    }
+async function getDynamicPaths() {
+  const data = ['house', 'flower', 'table'];
+  return data.map((item) => `/project/${item}`);
+}
 
-    getDynamicPaths().then((paths) => {
-      const Sitemap = configureSitemap({
-        domains: [{ domain: 'example.com', defaultLocale: 'en' }],
-        include: paths,
-        exclude: ['/project/*'],
-        excludeIndex: true,
-        pagesConfig: {
-          '/project/*': {
-            priority: '0.5',
-            changefreq: 'daily',
-          },
-        },
-        trailingSlash: true,
-        targetDirectory: __dirname + '/public',
-        pagesDirectory: __dirname + '/src/pages',
-      });
-      
-      Sitemap.generateSitemap().then(() => {
-        const inp = fs.createReadStream('public/sitemap.xml');
-        const out = fs.createWriteStream('public/sitemap.xml.gz');
-        const gzip = zlib.createGzip();
-        inp.pipe(gzip).pipe(out);
-        fs.unlink('public/sitemap.xml', () =>
-          console.log('Sitemap.xml has been deleted!'),
-        );
-        console.log('Sitemap.xml.gz has been created!');
-      });
-    });
-    ```
+getDynamicPaths().then((paths) => {
+  const Sitemap = configureSitemap({
+    domains: [{ domain: 'example.com', defaultLocale: 'en' }],
+    include: paths,
+    exclude: ['/project/*'],
+    excludeIndex: true,
+    pagesConfig: {
+      '/project/*': {
+        priority: '0.5',
+        changefreq: 'daily',
+      },
+    },
+    trailingSlash: true,
+    targetDirectory: __dirname + '/public',
+    pagesDirectory: __dirname + '/src/pages',
+  });
 
-    </p>
-    </details> 
+  Sitemap.generateSitemap().then(() => {
+    const inp = fs.createReadStream('public/sitemap.xml');
+    const out = fs.createWriteStream('public/sitemap.xml.gz');
+    const gzip = zlib.createGzip();
+    inp.pipe(gzip).pipe(out);
+    fs.unlink('public/sitemap.xml', () =>
+      console.log('Sitemap.xml has been deleted!'),
+    );
+    console.log('Sitemap.xml.gz has been created!');
+  });
+});
+```
+
+</p>
+</details> 
 
 <!-- badges -->
 [version-badge]: https://img.shields.io/npm/v/@sergeymyssak/nextjs-sitemap.svg?style=flat-square
